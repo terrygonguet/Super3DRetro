@@ -1,0 +1,20 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	height: 100%;
+	width: 100%;
+}
+
+#game {
+	display: block;
+  background-color: #111;
+	/*cursor: url(resources/pointer.png) 2 2, auto;*/
+}
+
+@font-face {
+	font-family: "ArcadeClassic";
+	src: url("resources/ArcadeClassic.ttf");
+}
