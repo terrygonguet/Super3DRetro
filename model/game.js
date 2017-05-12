@@ -8,11 +8,14 @@ class Game extends createjs.Stage {
     super(canvasName);
 
     this.tickEnabled  = true;
-    this.txtFps       = new createjs.Text("-- FPS", "20px ArcadeClassic", "#EEE");
+    this.txtFps       = new QuickText({ x: 10, y: 10 });
+    this.camera       = new Camera(this);
+    this.objects3D    = [ this.camera ];
 
     this.setHandlers();
 
     this.addChild(this.txtFps);
+    this.addChild(this.camera);
   }
 
   setHandlers () {
@@ -24,13 +27,16 @@ class Game extends createjs.Stage {
   update (e) {
     this.txtFps.text = createjs.Ticker.getMeasuredFPS().toFixed(0) + " FPS";
     !e.paused && super.update(e);
+    this.objects3D.forEach(child => child.render(this.camera, e));
   }
 
   addChild (child) {
+    if (child instanceof Object3D) this.objects3D.push(child);
     super.addChild(child);
   }
 
   removeChild (child) {
+    if (child instanceof Object3D) this.objects3D.splice(this.objects3D.indexOf(child), 1);
     super.removeChild(child);
   }
 

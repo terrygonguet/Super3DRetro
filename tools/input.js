@@ -4,28 +4,26 @@ class Input extends createjs.EventDispatcher {
     super();
 
     this.keys = {
-      fire      : false,
-      cock      : false,
-      dodgeLeft : false,
-      dodgeRight: false,
-      dodgeDown : false
-      // aimUp     : false,
-      // aimDown   : false,
-      // aimRight  : false,
-      // aimLeft   : false
+      mouse1  : false,
+      mouse2  : false,
+      left    : false,
+      right   : false,
+      up      : false,
+      down    : false,
+      forward : false,
+      backward: false
     };
     this.aimDelta = $V([0,0]);
     this.mouseDelta = $V([0,0]);
 
     // changeable bindings
     this.bindings = {
-      dodgeLeft : "q",
-      dodgeRight: "e",
-      dodgeDown : "w"
-      // aimUp     : "w",
-      // aimDown   : "s",
-      // aimRight  : "a",
-      // aimLeft   : "d"
+      left    : "q",
+      right   : "d",
+      up      : " ",
+      down    : "Shift",
+      forward : "z",
+      backward: "s"
     };
 
     // native events listeners
@@ -41,105 +39,67 @@ class Input extends createjs.EventDispatcher {
   }
 
   getEvent (e) {
-    const event = new createjs.Event("");
-    // the event name means down, with a U suffix means up
+    const custEvent = new createjs.Event("");
+
     switch (e.type) {
       case "mousedown":
         switch (e.button) {
           case 0:
-            event.type = "fire";
-            this.keys.fire = true;
+            this.keys.mouse1 = true;
             break;
           case 2:
-            event.type = "cock";
-            this.keys.cock = true;
+            this.keys.mouse2 = true;
             break;
         }
         break;
       case "mouseup":
         switch (e.button) {
           case 0:
-            event.type = "fireU";
-            this.keys.fire = false;
+            this.keys.mouse1 = false;
             break;
           case 2:
-            event.type = "cockU";
-            this.keys.cock = false;
+            this.keys.mouse2 = false;
             break;
         }
         break;
-      case "keydown":
-        switch (e.key) {
-          case this.bindings.dodgeDown:
-            event.type = "dodgeDown";
-            this.keys.dodgeDown = true;
-            break;
-          case this.bindings.dodgeLeft:
-            event.type = "dodgeLeft";
-            this.keys.dodgeLeft = true;
-            break;
-          case this.bindings.dodgeRight:
-            event.type = "dodgeRight";
-            this.keys.dodgeRight = true;
-            break;
-          // case this.bindings.aimUp :
-          //   this.keys.aimUp = true;
-          //   break;
-          // case this.bindings.aimDown :
-          //   this.keys.aimDown = true;
-          //   break;
-          // case this.bindings.aimLeft :
-          //   this.keys.aimLeft = true;
-          //   break;
-          // case this.bindings.aimRight :
-          //   this.keys.aimRight = true;
-          //   break;
-        }
-        this.updateDelta();
-        break;
-      case "keyup":
-        switch (e.key) {
-          case this.bindings.dodgeDown:
-            event.type = "dodgeDownU";
-            this.keys.dodgeDown = false;
-            break;
-          case this.bindings.dodgeLeft:
-            event.type = "dodgeLeftU";
-            this.keys.dodgeLeft = false;
-            break;
-          case this.bindings.dodgeRight:
-            event.type = "dodgeRightU";
-            this.keys.dodgeRight = false;
-            break;
-          // case this.bindings.aimUp :
-          //   this.keys.aimUp = false;
-          //   break;
-          // case this.bindings.aimDown :
-          //   this.keys.aimDown = false;
-          //   break;
-          // case this.bindings.aimLeft :
-          //   this.keys.aimLeft = false;
-          //   break;
-          // case this.bindings.aimRight :
-          //   this.keys.aimRight = false;
-          //   break;
-        }
-        this.updateDelta();
-        break;
+      case "keydown": {
+        this.keys[e.key] = true;
+        let type = Object.keys(this.bindings).find(key => {
+          if (e.key === this.bindings[key]) {
+            this.keys[key] = true;
+            return true;
+          }
+        });
+        custEvent.type = (type ? type : "");
+        } break;
+      case "keyup": {
+        this.keys[e.key] = false;
+        let type = Object.keys(this.bindings).find(key => {
+          if (e.key === this.bindings[key]) {
+            this.keys[key] = false;
+            return true;
+          }
+        });
+        custEvent.type = (type ? type + "U" : "");
+        } break;
       case "focus" : break;
       case "blur" :
         document.exitPointerLock();
         break;
       case "mousemove" :
         if (document.pointerLockElement) {
-          event.type = "mousemove";
+          custEvent.type = "lockedmousemove";
           this.mouseDelta = $V([e.movementX, e.movementY]);
         } else
           this.mouseDelta = $V([0,0]);
         break;
     }
-    event.original = e;
-    event.type !== "" && this.dispatchEvent(event);
+    custEvent.original = e;
+    custEvent.type && this.dispatchEvent(custEvent);
+
+    const defEvent = new createjs.Event(e.type);
+    defEvent.original = e;
+    this.dispatchEvent(defEvent);
   }
 
   updateDelta() {

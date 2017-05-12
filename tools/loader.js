@@ -21,7 +21,7 @@ const debug = false;
     x: window.innerWidth / 2,
     y: window.innerHeight / 2
   });
-  const txt = new createjs.Text("Loading", "50px Montserrat", "#000");
+  const txt = new createjs.Text("Loading", "50px Montserrat", "#EEE");
   txt.set({
     x: window.innerWidth / 2,
     y: window.innerHeight / 3,
@@ -40,7 +40,10 @@ const debug = false;
     {id: "Tools", src:"tools/tools.js"},
     {id: "Input Manager", src:"tools/input.js"},
     {id: "Game", src:"model/game.js"},
-    {id: "SplashScreen", src:"model/splashScreen.js"}
+    {id: "QuickText", src:"model/quickText.js"},
+    {id: "Object3D", src:"model/object3d.js"},
+    {id: "Point3D", src:"model/point3d.js"},
+    {id: "Camera", src:"model/camera.js"}
 
     // Sprites ----------------------------------------
 
@@ -63,7 +66,7 @@ const debug = false;
 
   function handleFileLoad	(e) {
     nbLoaded ++;
-    bar.graphics.s("#000").a(0, 0, 50, -Math.PI/2, (nbLoaded / queue.manifest.length) * (2 * Math.PI) - Math.PI/2).es();
+    bar.graphics.s("#EEE").a(0, 0, 50, -Math.PI/2, (nbLoaded / queue.manifest.length) * (2 * Math.PI) - Math.PI/2).es();
     stage.update();
     console.log(e.item.id + " loaded.");
   }
