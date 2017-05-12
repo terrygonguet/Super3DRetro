@@ -5,7 +5,7 @@ class Camera extends createjs.Shape {
     this.position      = Vector.Zero(3);
     this.i             = Vector.i.dup();
     this.j             = Vector.j.dup();
-    this.k             = Vector.k.dup().x(-1);
+    this.k             = Vector.k.x(-1);
     this.forward       = this.i;
     this.fovW          = Math.PI / 2;
     this.fovH          = this.fovW * (game.canvas.height / game.canvas.width);
@@ -26,7 +26,7 @@ class Camera extends createjs.Shape {
     });
   }
 
-  render (camera, e) {
+  update (e) {
     this.position = this.position.add(
       this.i.x(input.keys.forward-input.keys.backward).x(this.speed * e.delta / 1000)
     );
@@ -41,25 +41,25 @@ class Camera extends createjs.Shape {
       [this.i.e(2), this.j.e(2), this.k.e(2)],
       [this.i.e(3), this.j.e(3), this.k.e(3)]
     ]);
+  }
+
+  render (camera) {
     this.graphics.c();
   }
 
   move (vect) {
     this.position = this.position.add(vect);
-    // this.i        = this.i.add(vect).toUnitVector();
-    // this.j        = this.j.add(vect).toUnitVector();
-    // this.k        = this.k.add(vect).toUnitVector();
   }
 
   getDispCoords (point3d) {
-    let camCoords = this.transferMatrx.x(coords.subtract(this.position));
+    let camCoords = this.transferMatrx.x(point3d.subtract(this.position));
     let angleX = $V([camCoords.e(1), camCoords.e(2), 0]).angleFrom(Vector.i);
     let angleY = $V([camCoords.e(1), 0, camCoords.e(3)]).angleFrom(Vector.i);
 
-    if (angleX < this.fovW && angleY < this.fovH) {
+    if (angleX < this.fovW + 1 && angleY < this.fovH + 1) {
       let dispCoords = {
-        x: (angleX / this.fovW * Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
-        y: (angleY / this.fovH * Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
+        x: (angleX * Math.PI / this.fovW * Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
+        y: (angleY * Math.PI / this.fovH * Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
       };
       return dispCoords;
     } else return false;

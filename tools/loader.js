@@ -42,7 +42,9 @@ const debug = false;
     {id: "Game", src:"model/game.js"},
     {id: "QuickText", src:"model/quickText.js"},
     {id: "Object3D", src:"model/object3d.js"},
+    {id: "Shape3D", src:"model/shape3d.js"},
     {id: "Point3D", src:"model/point3d.js"},
+    {id: "Cube", src:"model/cube.js"},
     {id: "Camera", src:"model/camera.js"}
 
     // Sprites ----------------------------------------
