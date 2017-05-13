@@ -11,8 +11,9 @@ class Shape3D extends Object3D {
   }
 
   render (camera) {
+    camera.color(this.color);
     this.edges.forEach(edge =>
-      camera.drawLine(this.vertices[edge.from], this.vertices[edge.to])
+      camera.color(edge.color).drawLine(this.vertices[edge.from], this.vertices[edge.to])
     );
   }
 
@@ -58,11 +59,12 @@ class Shape3D extends Object3D {
     return this.vertices.length - 1;
   }
 
-  addEdge (vFrom, vTo) {
+  addEdge (vFrom, vTo, color) {
     if (this.vertices[vFrom] && this.vertices[vTo]) {
       this.edges.push({
         from: vFrom,
-        to: vTo
+        to: vTo,
+        color: (color ? color : this.color)
       });
     }
   }

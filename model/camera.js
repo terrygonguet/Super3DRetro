@@ -5,37 +5,18 @@ class Camera extends createjs.Shape {
     this.position      = Vector.Zero(3);
     this.i             = Vector.i.dup();
     this.j             = Vector.j.dup();
-    this.k             = Vector.k.x(-1);
-    this.forward       = this.i;
+    this.k             = Vector.k.dup();
     this.fovW          = Math.PI / 2;
     this.fovH          = this.fovW * (game.canvas.height / game.canvas.width);
-    this.speed         = 5;
+    this.speed         = 10;
     this.transferMatrx = $M([
       [this.i.e(1), this.j.e(1), this.k.e(1)],
       [this.i.e(2), this.j.e(2), this.k.e(2)],
       [this.i.e(3), this.j.e(3), this.k.e(3)]
     ]);
-
-    input.on("lockedmousemove", e => {
-      let rotaK = input.mouseDelta.e(1) / 3600;
-      let rotaJ = input.mouseDelta.e(2) / 3600;
-      this.i = Matrix.Rotation(rotaK, this.k).x(this.i);
-      this.j = Matrix.Rotation(rotaK, this.k).x(this.j);
-      this.i = Matrix.Rotation(rotaJ, this.j).x(this.i);
-      this.k = Matrix.Rotation(rotaJ, this.j).x(this.k);
-    });
   }
 
   update (e) {
-    this.position = this.position.add(
-      this.i.x(input.keys.forward-input.keys.backward).x(this.speed * e.delta / 1000)
-    );
-    this.position = this.position.add(
-      this.j.x(input.keys.right-input.keys.left).x(this.speed * e.delta / 1000)
-    );
-    this.position = this.position.add(
-      this.k.x(input.keys.down-input.keys.up).x(this.speed * e.delta / 1000)
-    );
     this.transferMatrx = $M([
       [this.i.e(1), this.j.e(1), this.k.e(1)],
       [this.i.e(2), this.j.e(2), this.k.e(2)],
@@ -58,17 +39,22 @@ class Camera extends createjs.Shape {
 
     if (angleX < this.fovW + 1 && angleY < this.fovH + 1) {
       let dispCoords = {
-        x: (angleX * Math.PI / this.fovW * Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
-        y: (angleY * Math.PI / this.fovH * Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
+        x: (angleX*Math.PI/this.fovW*Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
+        y: (angleY*Math.PI/this.fovH*Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
       };
       return dispCoords;
     } else return false;
   }
 
+  color(val) {
+    this.graphics.s(val);
+    return this;
+  }
+
   drawPoint (coords) {
     let dispCoords = this.getDispCoords(coords);
     if (dispCoords) {
-      this.graphics.s("#EEE").r(dispCoords.x, dispCoords.y, 1, 1);
+      this.graphics.r(dispCoords.x, dispCoords.y, 1, 1);
     }
   }
 
@@ -76,7 +62,7 @@ class Camera extends createjs.Shape {
     let a = this.getDispCoords(ptFrom);
     let b = this.getDispCoords(ptTo);
     if (a && b) {
-      this.graphics.s("#EEE").mt(a.x, a.y).lt(b.x, b.y);
+      this.graphics.mt(a.x, a.y).lt(b.x, b.y);
     }
   }
 

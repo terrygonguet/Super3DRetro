@@ -1,15 +1,16 @@
 class Cube extends Shape3D {
 
-  constructor(x, y, z) {
+  constructor(x, y, z, side, color = "#EEE") {
     super(x, y, z);
-    this.addVertex($V([-5,-5,-5]));
-    this.addVertex($V([5,-5,-5]));
-    this.addVertex($V([-5,5,-5]));
-    this.addVertex($V([-5,-5,5]));
-    this.addVertex($V([5,-5,5]));
-    this.addVertex($V([5,5,-5]));
-    this.addVertex($V([-5,5,5]));
-    this.addVertex($V([5,5,5]));
+    this.color = color
+    this.addVertex($V([-side / 2,-side / 2,-side / 2]));
+    this.addVertex($V([side / 2,-side / 2,-side / 2]));
+    this.addVertex($V([-side / 2,side / 2,-side / 2]));
+    this.addVertex($V([-side / 2,-side / 2,side / 2]));
+    this.addVertex($V([side / 2,-side / 2,side / 2]));
+    this.addVertex($V([side / 2,side / 2,-side / 2]));
+    this.addVertex($V([-side / 2,side / 2,side / 2]));
+    this.addVertex($V([side / 2,side / 2,side / 2]));
 
     this.addEdge(0, 1);
     this.addEdge(0, 2);
@@ -27,8 +28,6 @@ class Cube extends Shape3D {
 
   update (e) {
     super.update(e);
-    let a = e.delta / 1000 * Math.PI / 8;
-    this.rotate(a,a,a);
   }
 
 }

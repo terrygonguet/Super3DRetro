@@ -16,7 +16,7 @@ class Game extends createjs.Stage {
 
     this.addChild(this.txtFps);
     this.addChild(this.camera);
-    this.addChild(new Cube(100,0,0));
+    this.addChild(new Cube(100,0,0,10,"#D22"));
   }
 
   setHandlers () {
@@ -27,9 +27,11 @@ class Game extends createjs.Stage {
 
   update (e) {
     this.txtFps.text = createjs.Ticker.getMeasuredFPS().toFixed(0) + " FPS";
-    !e.paused && super.update(e);
-    this.objects3D.forEach(child => child.update(e));
-    this.objects3D.forEach(child => child.render(this.camera));
+    if (!e.paused) {
+      super.update(e);
+      this.objects3D.forEach(child => child.update(e));
+      this.objects3D.forEach(child => child.render(this.camera));
+    }
   }
 
   addChild (child) {
