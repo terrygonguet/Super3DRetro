@@ -4,8 +4,12 @@ class Point3D extends Object3D  {
     super(x, y, z);
   }
 
+  update (e) {
+
+  }
+
   render (camera) {
-    camera.drawPoint(this.position);
+    camera.color(this.color).drawPoint(this.position);
   }
 
 }

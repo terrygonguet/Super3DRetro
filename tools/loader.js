@@ -41,11 +41,13 @@ const debug = false;
     {id: "Input Manager", src:"tools/input.js"},
     {id: "Game", src:"model/game.js"},
     {id: "QuickText", src:"model/quickText.js"},
-    {id: "Object3D", src:"model/object3d.js"},
-    {id: "Shape3D", src:"model/shape3d.js"},
-    {id: "Point3D", src:"model/point3d.js"},
-    {id: "Cube", src:"model/cube.js"},
+    {id: "Object3D", src:"model/shapes/object3d.js"},
+    {id: "Shape3D", src:"model/shapes/shape3d.js"},
+    {id: "Point3D", src:"model/shapes/point3d.js"},
+    {id: "Cube", src:"model/shapes/cube.js"},
+    {id: "Spaceship", src:"model/shapes/spaceship.js"},
     {id: "Indicator", src:"model/indic.js"},
+    {id: "Stardust", src:"model/stardust.js"},
     {id: "Camera", src:"model/camera.js"}
 
     // Sprites ----------------------------------------

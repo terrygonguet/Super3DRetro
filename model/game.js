@@ -9,14 +9,25 @@ class Game extends createjs.Stage {
 
     this.tickEnabled  = true;
     this.txtFps       = new QuickText({ x: 10, y: 10 });
+    this.txtrendered  = new QuickText({ x: 10, y: 30 });
+    this.txtrendertime= new QuickText({ x: 10, y: 50 });
     this.camera       = new Camera(this);
     this.objects3D    = [ this.camera ];
+    this.stardust     = new Stardust();
+    this.player       = new Spaceship(100,0,-20);
+    this.nbRendered   = 0;
+    this.rendertime   = 0;
 
     this.setHandlers();
 
+    this.camera.rotate(0,0.1,0);
+
     this.addChild(this.txtFps);
+    this.addChild(this.txtrendered);
+    this.addChild(this.txtrendertime);
     this.addChild(this.camera);
-    this.addChild(new Cube(100,0,0,10,"#D22"));
+    this.addChild(this.stardust);
+    this.addChild(this.player);
   }
 
   setHandlers () {
@@ -27,11 +38,17 @@ class Game extends createjs.Stage {
 
   update (e) {
     this.txtFps.text = createjs.Ticker.getMeasuredFPS().toFixed(0) + " FPS";
+    this.txtrendered.text = this.nbRendered + " Objects rendered";
+    this.nbRendered = 0;
+    this.rendertime = 0;
     if (!e.paused) {
+      let time = performance.now();
       super.update(e);
       this.objects3D.forEach(child => child.update(e));
       this.objects3D.forEach(child => child.render(this.camera));
+      this.rendertime += (performance.now() - time);
     }
+    this.txtrendertime.text = this.rendertime.toPrecision(3) + " ms render time";
   }
 
   addChild (child) {
