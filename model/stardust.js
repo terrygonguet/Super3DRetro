@@ -1,6 +1,6 @@
 class Stardust extends createjs.DisplayObject {
 
-  constructor(radius = 200, density = 0.00005) {
+  constructor(radius = 200, density = 0.00001) {
     super();
     this.on("tick", e => this.update(e));
     this.stars   = [];

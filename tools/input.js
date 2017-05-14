@@ -20,8 +20,8 @@ class Input extends createjs.EventDispatcher {
     this.bindings = {
       left    : "q",
       right   : "d",
-      up      : " ",
-      down    : "Shift",
+      up      : "a",
+      down    : "e",
       forward : "z",
       backward: "s"
     };
@@ -90,6 +90,7 @@ class Input extends createjs.EventDispatcher {
         if (document.pointerLockElement) {
           custEvent.type = "lockedmousemove";
           this.mouseDelta = $V([e.movementX, e.movementY]);
+          this.aimDelta = this.aimDelta.add(this.mouseDelta);
         } else
           this.mouseDelta = $V([0,0]);
         break;

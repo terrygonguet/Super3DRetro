@@ -13,10 +13,7 @@ class Indicator extends Shape3D {
   }
 
   update (e) {
-    this.vertices[0] = $V([10,0,0]);// game.camera.position.add(game.camera.i.x(5));
-    this.vertices[1] = this.vertices[0].add(game.camera.i);
-    this.vertices[2] = this.vertices[0].add(game.camera.j);
-    this.vertices[3] = this.vertices[0].add(game.camera.k);
+    
   }
 
   render (camera) {

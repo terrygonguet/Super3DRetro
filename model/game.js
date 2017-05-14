@@ -14,13 +14,11 @@ class Game extends createjs.Stage {
     this.camera       = new Camera(this);
     this.objects3D    = [ this.camera ];
     this.stardust     = new Stardust();
-    this.player       = new Spaceship(100,0,-20);
+    this.player       = new Spaceship(0,0,0);
     this.nbRendered   = 0;
     this.rendertime   = 0;
 
     this.setHandlers();
-
-    this.camera.rotate(0,0.1,0);
 
     this.addChild(this.txtFps);
     this.addChild(this.txtrendered);

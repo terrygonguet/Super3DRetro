@@ -18,7 +18,7 @@ class Shape3D extends Object3D {
   }
 
   move (vect) {
-    this.position.add(vect);
+    this.position = this.position.add(vect);
     this.vertices = this.vertices.map(vertex => vertex.add(vect));
   }
 
