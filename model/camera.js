@@ -60,8 +60,8 @@ class Camera extends createjs.Shape {
     return retval;
   }
 
-  color(val) {
-    this.graphics.s(val);
+  color(border, inner) {
+    this.graphics.s(border).f(inner);
     return this;
   }
 
@@ -71,6 +71,7 @@ class Camera extends createjs.Shape {
       game.nbRendered++;
       this.graphics.r(dispCoords.x, dispCoords.y, 1, 1);
     }
+    return this;
   }
 
   drawLine (ptFrom, ptTo) {
@@ -80,6 +81,18 @@ class Camera extends createjs.Shape {
       game.nbRendered++;
       this.graphics.mt(a.x, a.y).lt(b.x, b.y);
     }
+    return this;
+  }
+
+  drawPoly (v1, v2, v3, border, inner) {
+    let a = this.getDispCoords(v1);
+    let b = this.getDispCoords(v2);
+    let c = this.getDispCoords(v3);
+    if (a && b && c) {
+      game.nbRendered++;
+      this.graphics.mt(a.x,a.y).lt(b.x,b.y).lt(c.x,c.y).cp();
+    }
+    return this;
   }
 
 }

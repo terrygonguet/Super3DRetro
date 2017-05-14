@@ -9,7 +9,7 @@ class Point3D extends Object3D  {
   }
 
   render (camera) {
-    camera.color(this.color).drawPoint(this.position);
+    camera.color(this.border).drawPoint(this.position);
   }
 
 }

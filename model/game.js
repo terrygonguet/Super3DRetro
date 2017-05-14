@@ -42,8 +42,12 @@ class Game extends createjs.Stage {
     if (!e.paused) {
       let time = performance.now();
       super.update(e);
-      this.objects3D.forEach(child => child.update(e));
-      this.objects3D.forEach(child => child.render(this.camera));
+      let sorted = this.objects3D.sort(
+        (a,b) =>
+        a.position.distanceFrom(this.camera.position)>b.position.distanceFrom(this.camera.position)
+      );
+      sorted.forEach(child => child.update(e));
+      sorted.forEach(child => child.render(this.camera));
       this.rendertime += (performance.now() - time);
     }
     this.txtrendertime.text = this.rendertime.toPrecision(3) + " ms render time";

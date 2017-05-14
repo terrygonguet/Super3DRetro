@@ -3,6 +3,7 @@ class Shape3D extends Object3D {
   constructor(x, y, z) {
     super(x, y, z);
     this.vertices = [];
+    this.polygons = [];
     this.edges    = [];
   }
 
@@ -12,9 +13,24 @@ class Shape3D extends Object3D {
 
   render (camera) {
     camera.color(this.color);
-    this.edges.forEach(edge =>
-      camera.color(edge.color).drawLine(this.vertices[edge.from], this.vertices[edge.to])
-    );
+    let v = this.vertices, c = camera.position; // shorthands
+    if (this.polygons.length)
+      this.polygons
+      .sort((a, b) => {
+        let avgA = v[a.v1].add(v[a.v2]).add(v[a.v3]).x(1/3);
+        let avgB = v[b.v1].add(v[b.v2]).add(v[b.v3]).x(1/3);
+        // let maxA = [v[a.v1].distanceFrom(c), v[a.v2].distanceFrom(c), v[a.v3].distanceFrom(c)].sort((a,b) => a < b)[0];
+        // let maxB = [v[b.v1].distanceFrom(c), v[b.v2].distanceFrom(c), v[b.v3].distanceFrom(c)].sort((a,b) => a < b)[0];
+        return avgA.distanceFrom(camera.position) < avgB.distanceFrom(camera.position);
+      })
+      .forEach(poly =>
+        camera.color(poly.border, poly.inner)
+              .drawPoly(this.vertices[poly.v1], this.vertices[poly.v2], this.vertices[poly.v3])
+      );
+    if (this.edges.length)
+      this.edges.forEach(edge =>
+        camera.color(edge.color).drawLine(this.vertices[edge.from], this.vertices[edge.to])
+      );
   }
 
   move (vect) {
@@ -59,12 +75,22 @@ class Shape3D extends Object3D {
     return this.vertices.length - 1;
   }
 
+  addPolygon(v1, v2, v3, borderColor, innerColor) {
+    if (this.vertices[v1] && this.vertices[v2] && this.vertices[v3]) {
+      this.polygons.push({
+        v1, v2, v3,
+        border: borderColor || this.border,
+        inner: innerColor || this.inner
+      });
+    }
+  }
+
   addEdge (vFrom, vTo, color) {
     if (this.vertices[vFrom] && this.vertices[vTo]) {
       this.edges.push({
         from: vFrom,
         to: vTo,
-        color: (color ? color : this.color)
+        color: (color || this.border)
       });
     }
   }
