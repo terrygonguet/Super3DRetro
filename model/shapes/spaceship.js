@@ -9,13 +9,37 @@ class Spaceship extends Shape3D {
     this.hint = new QuickText({ x: 10, y: 70, text: "ZQSD+MOUSE  to  control (azerty  ftw)" });
     this.autorotate = true;
     this.rotaI = 0;
+    this.dblTap = { key: "", time: 0 };
+    this.barrelTime = 0;
+    this.barrelSide = 0;
+
+    input.on("keydown", () => this.autorotate = false, null, true);
+    input.on("keydown", e => {
+      if (e.original.repeat) return;
+      if (this.dblTap.key !== e.original.key) {
+        if (this.dblTap.time <= 0) this.dblTap = { key: e.original.key, time: 150 };
+      } else if (this.dblTap.time > 0) {
+        this.dispatchEvent(new createjs.Event("dblTap").set({ key: this.dblTap.key }));
+        this.dblTap = { key: "", time: 1000 };
+      } else {
+        this.dblTap = { key: e.original.key, time: 200 };
+      }
+    });
 
     this.on("tick", () => {
       game.addChild(this.hint);
     }, null, true);
-    input.on("keydown", () => this.autorotate = false, null, true);
+    this.on("dblTap", e => {
+      switch (e.key) {
+        case input.bindings.left:
+          this.barrelRoll("left");
+          break;
+        case input.bindings.right:
+          this.barrelRoll("right");
+          break;
+      }
+    });
 
-    // start at 18
     this.addVertex($V([-10,-5,3])); // backside top left 0
     this.addVertex($V([-10,5,3])); // backside top right 1
     this.addVertex($V([-10,-5,-3])); // backside bottom left 2
@@ -59,12 +83,21 @@ class Spaceship extends Shape3D {
   }
 
   update (e) {
-    this.rotate(-this.rotaI,0,0); // because I'm too lazy to make a proper quaternion
+    if (this.dblTap.time > 0) this.dblTap.time -= e.delta;
+    this.rotate(
+      (this.barrelSide ? 0 : -this.rotaI) - (1-this.barrelTime/1000)*Math.PI*2*this.barrelSide,
+      0,
+      0); // because I'm too lazy to make a proper quaternion
+    if (this.barrelTime >= 0) this.barrelTime -= e.delta;
+    else this.barrelSide = 0;
 
     let speed = this.speed[1 + (input.keys.forward-input.keys.backward)];
     this.vertices[15] = this.position.add(this.i.x(-speed/2-10));
     this.move(this.i.x(speed * e.delta / 1000));
-    this.move(this.j.x(speed / 2 * e.delta / 1000 * (input.keys.right-input.keys.left)));
+    if (this.barrelSide)
+      this.move(this.j.x(-this.barrelSide*60*e.delta/1000))
+    else
+      this.move(this.j.x(speed / 2 * e.delta / 1000 * (input.keys.right-input.keys.left)));
 
     let curOffset = this.i.x(this.cameraOffset.e(1) - speed/5);
     curOffset = curOffset.add(this.k.x(this.cameraOffset.e(3)));
@@ -72,16 +105,19 @@ class Spaceship extends Shape3D {
 
     this.rotaI = (input.keys.left-input.keys.right) * 0.3;
     this.rotate(
-      this.rotaI,
-      input.aimDelta.e(2)/3600*e.delta/1000,
-      -input.aimDelta.e(1)/3600*e.delta/1000
+      (this.barrelSide ? 0 : this.rotaI) + (1-this.barrelTime/1000)*Math.PI*2*this.barrelSide,
+      input.aimDelta.e(2)/1500*e.delta/1000,
+      -input.aimDelta.e(1)/1500*e.delta/1000
     );
     input.aimDelta = input.aimDelta.x(1 - (0.9 * e.delta / 1000));
 
     game.camera.i = this.i;
     game.camera.j = this.j;
     game.camera.k = this.k;
-    game.camera.rotate(-this.rotaI,0.1,0);
+    game.camera.rotate(
+      (this.barrelSide ? 0 : -this.rotaI) - (1-this.barrelTime/1000)*Math.PI*2*this.barrelSide,
+      0.1,
+      0);
     // game.camera.position = this.position.add(this.cameraOffset);
     // if (this.autorotate) {
     //   this.rotate(Math.PI / 7000 * e.delta,0,0);
@@ -91,6 +127,11 @@ class Spaceship extends Shape3D {
     //   (input.keys.forward-input.keys.backward) * Math.PI * e.delta / 3600,
     //   (input.keys.up-input.keys.down) * Math.PI * e.delta / 3600
     // );
+  }
+
+  barrelRoll (side) {
+    this.barrelTime = 1000;
+    this.barrelSide = (side === "right" ? -1 : 1);
   }
 
 }
