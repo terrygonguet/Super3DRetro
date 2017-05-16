@@ -18,11 +18,12 @@ class Shape3D extends Object3D {
       let distances = this.polygons
         .map(poly => {
           return {
-          dist:v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3).distanceFrom(camera.position),
+          dist:v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3).distanceFrom(c),
           poly
           }
-        })
-        .sort((a,b) => a.dist <= b.dist)
+        });
+      distances = _.sortBy(distances, 'dist').reverse();
+      distances
         .map(poly => poly.poly)
         .forEach(poly =>
           camera.color(poly.border, poly.inner)

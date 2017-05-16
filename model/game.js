@@ -12,7 +12,7 @@ class Game extends createjs.Stage {
     this.txtrendered  = new QuickText({ x: 10, y: 30 });
     this.txtrendertime= new QuickText({ x: 10, y: 50 });
     this.camera       = new Camera(this);
-    this.objects3D    = [ this.camera ];
+    this.objects3D    = [];
     this.stardust     = new Stardust();
     this.player       = new Spaceship(0,0,0);
     this.nbRendered   = 0;
@@ -42,10 +42,13 @@ class Game extends createjs.Stage {
     if (!e.paused) {
       let time = performance.now();
       super.update(e);
-      let sorted = this.objects3D.sort(
-        (a,b) =>
-        a.position.distanceFrom(this.camera.position)>b.position.distanceFrom(this.camera.position)
-      );
+      this.camera.update(e);
+      this.camera.render(e);
+      let sorted = this.objects3D.map(obj => {
+        return { dist:obj.position.distanceFrom(this.camera.position), obj };
+      });
+      sorted = _.sortBy(sorted, 'dist').map(obj => obj.obj);
+      sorted.reverse();
       sorted.forEach(child => child.update(e));
       sorted.forEach(child => child.render(this.camera));
       this.rendertime += (performance.now() - time);
