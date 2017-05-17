@@ -32,6 +32,10 @@ class Game extends createjs.Stage {
     createjs.Ticker.timingMode = createjs.Ticker.RAF;
     createjs.Ticker.framerate = 60;
     createjs.Ticker.on("tick", this.update, this);
+
+    this.on("tick", e => {
+      this.addChild(new CapitalShip(1300,0,-300));
+    }, null, true);
   }
 
   update (e) {

@@ -60,6 +60,17 @@ class Camera extends createjs.Shape {
     return retval;
   }
 
+  forceGetDispCoords (point3d) {
+    let camCoords = this.transferMatrix.x(point3d.subtract(this.position));
+    let angleX = $V([camCoords.e(1), camCoords.e(2), 0]).angleFrom(Vector.i);
+    let angleY = $V([camCoords.e(1), 0, camCoords.e(3)]).angleFrom(Vector.i);
+
+    return {
+      x: (angleX*Math.PI/this.fovW*Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
+      y: (angleY*Math.PI/this.fovH*Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
+    };
+  }
+
   color(border, inner) {
     this.graphics.s(border).f(inner);
     return this;
@@ -74,23 +85,38 @@ class Camera extends createjs.Shape {
     return this;
   }
 
-  drawLine (ptFrom, ptTo) {
-    let a = this.getDispCoords(ptFrom);
-    let b = this.getDispCoords(ptTo);
-    if (a && b) {
+  drawLine (ptFrom, ptTo, force=false) {
+    if (force) {
+      let a = this.forceGetDispCoords(ptFrom);
+      let b = this.forceGetDispCoords(ptTo);
       game.nbRendered++;
       this.graphics.mt(a.x, a.y).lt(b.x, b.y);
+    } else {
+      let a = this.getDispCoords(ptFrom);
+      let b = this.getDispCoords(ptTo);
+      if (a && b) {
+        game.nbRendered++;
+        this.graphics.mt(a.x, a.y).lt(b.x, b.y);
+      }
     }
     return this;
   }
 
-  drawPoly (v1, v2, v3, border, inner) {
-    let a = this.getDispCoords(v1);
-    let b = this.getDispCoords(v2);
-    let c = this.getDispCoords(v3);
-    if (a && b && c) {
+  drawPoly (v1, v2, v3, force=false) {
+    if (force) {
+      let a = this.forceGetDispCoords(v1);
+      let b = this.forceGetDispCoords(v2);
+      let c = this.forceGetDispCoords(v3);
       game.nbRendered++;
       this.graphics.mt(a.x,a.y).lt(b.x,b.y).lt(c.x,c.y).cp();
+    } else {
+      let a = this.getDispCoords(v1);
+      let b = this.getDispCoords(v2);
+      let c = this.getDispCoords(v3);
+      if (a && b && c) {
+        game.nbRendered++;
+        this.graphics.mt(a.x,a.y).lt(b.x,b.y).lt(c.x,c.y).cp();
+      }
     }
     return this;
   }

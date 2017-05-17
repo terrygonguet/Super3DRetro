@@ -5,6 +5,7 @@ class Shape3D extends Object3D {
     this.vertices = [];
     this.polygons = [];
     this.edges    = [];
+    this.forceRender = false;
   }
 
   update (e) {
@@ -15,31 +16,46 @@ class Shape3D extends Object3D {
     let v = this.vertices, c = camera.position; // shorthands
 
     let dist = this.position.distanceFrom(c);
-    if (dist >= 5000) {} // nothing
-    else if (dist >= 2000) {
-      camera.color(this.border).drawPoint(this.position);
-    } else {
+    if (dist <= 2000 || this.forceRender) {
       if (this.polygons.length) {
         let distances = this.polygons
           .map(poly => {
+            let avg = v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3);
+            let closest = v[poly.v1];
+            if (v[poly.v2].distanceFrom(c) < closest.distanceFrom(c)) closest = v[poly.v2];
+            if (v[poly.v3].distanceFrom(c) < closest.distanceFrom(c)) closest = v[poly.v3];
             return {
-            dist:v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3).distanceFrom(c),
-            poly
+              dist:avg.add(closest).x(0.5).distanceFrom(c),
+              poly
             }
           });
         distances = _.sortBy(distances, 'dist').reverse();
         distances
           .map(poly => poly.poly)
           .forEach(poly =>
-            camera.color(poly.border, poly.inner)
-              .drawPoly(this.vertices[poly.v1], this.vertices[poly.v2], this.vertices[poly.v3])
+            camera
+              .color(poly.border, poly.inner)
+              .drawPoly(
+                this.vertices[poly.v1],
+                this.vertices[poly.v2],
+                this.vertices[poly.v3],
+                this.forceRender
+              )
           );
 
       }
       if (this.edges.length)
         this.edges.forEach(edge =>
-          camera.color(edge.color).drawLine(this.vertices[edge.from], this.vertices[edge.to])
+          camera
+            .color(edge.color)
+            .drawLine(
+              this.vertices[edge.from],
+              this.vertices[edge.to],
+              this.forceRender
+            )
         );
+    } else if (dist <= 5000) {
+      camera.color(this.border).drawPoint(this.position);
     }
   }
 
