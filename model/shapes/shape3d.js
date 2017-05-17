@@ -12,29 +12,35 @@ class Shape3D extends Object3D {
   }
 
   render (camera) {
-    camera.color(this.color);
     let v = this.vertices, c = camera.position; // shorthands
-    if (this.polygons.length) {
-      let distances = this.polygons
-        .map(poly => {
-          return {
-          dist:v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3).distanceFrom(c),
-          poly
-          }
-        });
-      distances = _.sortBy(distances, 'dist').reverse();
-      distances
-        .map(poly => poly.poly)
-        .forEach(poly =>
-          camera.color(poly.border, poly.inner)
-            .drawPoly(this.vertices[poly.v1], this.vertices[poly.v2], this.vertices[poly.v3])
-        );
 
+    let dist = this.position.distanceFrom(c);
+    if (dist >= 5000) {} // nothing
+    else if (dist >= 2000) {
+      camera.color(this.border).drawPoint(this.position);
+    } else {
+      if (this.polygons.length) {
+        let distances = this.polygons
+          .map(poly => {
+            return {
+            dist:v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3).distanceFrom(c),
+            poly
+            }
+          });
+        distances = _.sortBy(distances, 'dist').reverse();
+        distances
+          .map(poly => poly.poly)
+          .forEach(poly =>
+            camera.color(poly.border, poly.inner)
+              .drawPoly(this.vertices[poly.v1], this.vertices[poly.v2], this.vertices[poly.v3])
+          );
+
+      }
+      if (this.edges.length)
+        this.edges.forEach(edge =>
+          camera.color(edge.color).drawLine(this.vertices[edge.from], this.vertices[edge.to])
+        );
     }
-    if (this.edges.length)
-      this.edges.forEach(edge =>
-        camera.color(edge.color).drawLine(this.vertices[edge.from], this.vertices[edge.to])
-      );
   }
 
   move (vect) {
@@ -70,12 +76,8 @@ class Shape3D extends Object3D {
   }
 
   addVertex (vertex) {
-    let nV = $V([
-      vertex.e(1) + this.position.e(1),
-      vertex.e(2) + this.position.e(2),
-      vertex.e(3) + this.position.e(3)
-    ]);
-    if (nV) this.vertices.push(nV);
+    let nV = this.i.x(vertex.e(1)).add(this.j.x(vertex.e(2))).add(this.k.x(vertex.e(3)));
+    if (nV) this.vertices.push(nV.add(this.position));
     return this.vertices.length - 1;
   }
 

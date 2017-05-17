@@ -12,6 +12,9 @@ class Spaceship extends Shape3D {
     this.dblTap = { key: "", time: 0 };
     this.barrelTime = 0;
     this.barrelSide = 0;
+    this.blasterTime = 0;
+    this.blasterRate = 6;
+    this.blasterSide = 1;
 
     input.on("keydown", () => this.autorotate = false, null, true);
     input.on("keydown", e => {
@@ -118,6 +121,15 @@ class Spaceship extends Shape3D {
       (this.barrelSide ? 0 : -this.rotaI) - (1-this.barrelTime/1000)*Math.PI*2*this.barrelSide,
       0.1,
       0);
+
+    this.blasterTime += e.delta;
+    if (input.keys.mouse1 && this.blasterTime >= 1000 / this.blasterRate) {
+      this.blasterTime = 0;
+      game.addChild(new PulseMunition(
+        this.position.add(this.j.x(this.blasterSide * 5)), [this.i, this.j, this.k], 3000
+      ));
+      this.blasterSide = -this.blasterSide;
+    }
     // game.camera.position = this.position.add(this.cameraOffset);
     // if (this.autorotate) {
     //   this.rotate(Math.PI / 7000 * e.delta,0,0);

@@ -46,6 +46,7 @@ const debug = false;
     {id: "Point3D", src:"model/shapes/point3d.js"},
     {id: "Cube", src:"model/shapes/cube.js"},
     {id: "Spaceship", src:"model/shapes/spaceship.js"},
+    {id: "PulseMunition", src:"model/shapes/pulseMunition.js"},
     {id: "Indicator", src:"model/indic.js"},
     {id: "Stardust", src:"model/stardust.js"},
     {id: "Camera", src:"model/camera.js"}
