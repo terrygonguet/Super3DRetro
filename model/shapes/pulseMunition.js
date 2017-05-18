@@ -17,12 +17,12 @@ class PulseMunition extends Shape3D {
     this.addVertex($V([0,-0.5,-0.5]));
     this.addVertex($V([0,0.5,-0.5]));
     this.addVertex($V([0,0,0.5]));
-    this.addVertex($V([-10,0,0]));
+    this.addVertex($V([-30,0,0]));
 
-    this.addPolygon(0,1,2);
-    this.addPolygon(0,1,3);
-    this.addPolygon(1,2,3);
-    this.addPolygon(2,0,3);
+    this.addPolygon([0,1,2]);
+    this.addPolygon([0,1,3]);
+    this.addPolygon([1,2,3]);
+    this.addPolygon([2,0,3]);
   }
 
   update (e) {

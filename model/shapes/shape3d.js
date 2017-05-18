@@ -20,25 +20,34 @@ class Shape3D extends Object3D {
       if (this.polygons.length) {
         let distances = this.polygons
           .map(poly => {
-            let avg = v[poly.v1].add(v[poly.v2]).add(v[poly.v3]).x(1/3);
-            let closest = v[poly.v1];
-            if (v[poly.v2].distanceFrom(c) < closest.distanceFrom(c)) closest = v[poly.v2];
-            if (v[poly.v3].distanceFrom(c) < closest.distanceFrom(c)) closest = v[poly.v3];
+            let avg = Vector.Zero(3);
+            let closest = v[0];
+            poly.points.forEach(pt => {
+              avg = avg.add(v[pt]);
+              if (v[pt].distanceFrom(c) < closest.distanceFrom(c)) closest = v[pt];
+            });
+            avg = avg.x(1/poly.points.length);
+
             return {
-              dist:avg.add(closest).x(0.5).distanceFrom(c),
+              dist:avg.distanceFrom(c),
+              // dist:avg.add(closest).x(0.5).distanceFrom(c),
               poly
             }
           });
         distances = _.sortBy(distances, 'dist').reverse();
         distances
-          .map(poly => poly.poly)
+          .map(poly => {
+            return {
+              border: poly.poly.border,
+              inner: poly.poly.inner,
+              points: poly.poly.points.map(pt => v[pt])
+            };
+          })
           .forEach(poly =>
             camera
               .color(poly.border, poly.inner)
               .drawPoly(
-                this.vertices[poly.v1],
-                this.vertices[poly.v2],
-                this.vertices[poly.v3],
+                poly.points,
                 this.forceRender
               )
           );
@@ -97,10 +106,11 @@ class Shape3D extends Object3D {
     return this.vertices.length - 1;
   }
 
-  addPolygon(v1, v2, v3, borderColor, innerColor) {
-    if (this.vertices[v1] && this.vertices[v2] && this.vertices[v3]) {
+  addPolygon(points, borderColor, innerColor) {
+    let correct = points.length >= 3 && !points.some(pt => !this.vertices[pt]);
+    if (correct) {
       this.polygons.push({
-        v1, v2, v3,
+        points,
         border: borderColor || this.border,
         inner: innerColor || this.inner
       });

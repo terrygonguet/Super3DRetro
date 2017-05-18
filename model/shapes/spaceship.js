@@ -3,7 +3,7 @@ class Spaceship extends Shape3D {
   constructor(x, y, z) {
     super(x, y, z);
 
-    this.speed        = [10, 0, 60];
+    this.speed        = [-60, 0, 60];
     this.cameraOffset = $V([-100, 0, -20]);
     // this.cameraOffset = $V([-200, 0, 5]);
     this.hint = new QuickText({ x: 10, y: 70, text: "ZQSD+MOUSE  to  control (azerty  ftw)" });
@@ -61,26 +61,25 @@ class Spaceship extends Shape3D {
     this.addVertex($V([-10,0,-2])); // thruster bottom right 14
     this.addVertex($V([-20,0,0])); // thruster flame 15
 
-    this.addPolygon(0,1,2); // backside
-    this.addPolygon(1,2,3);
-    this.addPolygon(0,2,4); // backside to wings
-    this.addPolygon(1,3,5);
-    this.addPolygon(4,7,9); // wings thin
-    this.addPolygon(5,8,10);
-    this.addPolygon(0,4,9); // wings thick
-    this.addPolygon(2,4,9);
-    this.addPolygon(1,5,10);
-    this.addPolygon(3,5,10);
-    this.addPolygon(0,1,6); // top hull
-    this.addPolygon(0,9,6);
-    this.addPolygon(1,10,6);
-    this.addPolygon(2,3,6); // bottom hull
-    this.addPolygon(2,9,6);
-    this.addPolygon(3,10,6);
-    this.addPolygon(11,12,15,"#1E6CD9","rgba(30,108,217,0.2)"); // thruster
-    this.addPolygon(11,13,15,"#1E6CD9","rgba(30,108,217,0.2)");
-    this.addPolygon(13,14,15,"#1E6CD9","rgba(30,108,217,0.2)");
-    this.addPolygon(14,12,15,"#1E6CD9","rgba(30,108,217,0.2)");
+    this.addPolygon([0,1,3,2]); // backside
+    this.addPolygon([0,2,4]); // backside to wings
+    this.addPolygon([1,3,5]);
+    this.addPolygon([4,7,9]); // wings thin
+    this.addPolygon([5,8,10]);
+    this.addPolygon([0,4,9]); // wings thick
+    this.addPolygon([2,4,9]);
+    this.addPolygon([1,5,10]);
+    this.addPolygon([3,5,10]);
+    this.addPolygon([0,1,6]); // top hull
+    this.addPolygon([0,9,6]);
+    this.addPolygon([1,10,6]);
+    this.addPolygon([2,3,6]); // bottom hull
+    this.addPolygon([2,9,6]);
+    this.addPolygon([3,10,6]);
+    this.addPolygon([11,12,15],"#1E6CD9","rgba(30,108,217,0.2)"); // thruster
+    this.addPolygon([11,13,15],"#1E6CD9","rgba(30,108,217,0.2)");
+    this.addPolygon([13,14,15],"#1E6CD9","rgba(30,108,217,0.2)");
+    this.addPolygon([14,12,15],"#1E6CD9","rgba(30,108,217,0.2)");
 
     // this.rotate(0,-Math.PI/2,0);
   }

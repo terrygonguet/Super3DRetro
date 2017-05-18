@@ -102,22 +102,16 @@ class Camera extends createjs.Shape {
     return this;
   }
 
-  drawPoly (v1, v2, v3, force=false) {
-    if (force) {
-      let a = this.forceGetDispCoords(v1);
-      let b = this.forceGetDispCoords(v2);
-      let c = this.forceGetDispCoords(v3);
+  drawPoly (points, force=false) {
+    let coords = points.map(pt => {
       game.nbRendered++;
-      this.graphics.mt(a.x,a.y).lt(b.x,b.y).lt(c.x,c.y).cp();
-    } else {
-      let a = this.getDispCoords(v1);
-      let b = this.getDispCoords(v2);
-      let c = this.getDispCoords(v3);
-      if (a && b && c) {
-        game.nbRendered++;
-        this.graphics.mt(a.x,a.y).lt(b.x,b.y).lt(c.x,c.y).cp();
-      }
-    }
+      return (force ? this.forceGetDispCoords(pt) : this.getDispCoords(pt));
+    });
+    this.graphics.mt(coords[0].x, coords[0].y);
+    coords.shift();
+    coords.forEach(pt => this.graphics.lt(pt.x, pt.y));
+    this.graphics.cp();
+
     return this;
   }
 
