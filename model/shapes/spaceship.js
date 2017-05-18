@@ -76,10 +76,11 @@ class Spaceship extends Shape3D {
     this.addPolygon([2,3,6]); // bottom hull
     this.addPolygon([2,9,6]);
     this.addPolygon([3,10,6]);
-    this.addPolygon([11,12,15],"#1E6CD9","rgba(30,108,217,0.2)"); // thruster
-    this.addPolygon([11,13,15],"#1E6CD9","rgba(30,108,217,0.2)");
-    this.addPolygon([13,14,15],"#1E6CD9","rgba(30,108,217,0.2)");
-    this.addPolygon([14,12,15],"#1E6CD9","rgba(30,108,217,0.2)");
+    this.border = "#1E6CD9"; this.inner = "rgba(30,108,217,0.2)";
+    this.addPolygon([11,12,15]); // thruster
+    this.addPolygon([11,13,15]);
+    this.addPolygon([13,14,15]);
+    this.addPolygon([14,12,15]);
 
     // this.rotate(0,-Math.PI/2,0);
   }
@@ -109,9 +110,16 @@ class Spaceship extends Shape3D {
     let rotaIkeys = (input.keys.up-input.keys.down) * Math.PI/2 * e.delta/1000;
     this.rotate(
       (this.barrelSide ? 0 : this.rotaI + rotaIkeys) + (1-this.barrelTime/1000)*Math.PI*2*this.barrelSide,
-      input.aimDelta.e(2)/1500*e.delta/1000,
-      -input.aimDelta.e(1)/1500*e.delta/1000
+      0,0
     );
+
+    if (input.aimDelta.modulus() >= 30) {
+      this.rotate(
+        0,
+        input.aimDelta.e(2)/1500*e.delta/1000,
+        -input.aimDelta.e(1)/1500*e.delta/1000
+      );
+    }
     input.aimDelta = input.aimDelta.x(1 - (0.9 * e.delta / 1000));
 
     game.camera.i = this.i;
@@ -119,7 +127,7 @@ class Spaceship extends Shape3D {
     game.camera.k = this.k;
     game.camera.rotate(
       (this.barrelSide ? 0 : -this.rotaI) - (1-this.barrelTime/1000)*Math.PI*2*this.barrelSide,
-      0.06,
+      0.03,
       0);
 
     this.blasterTime += e.delta;

@@ -21,16 +21,13 @@ class Shape3D extends Object3D {
         let distances = this.polygons
           .map(poly => {
             let avg = Vector.Zero(3);
-            let closest = v[0];
             poly.points.forEach(pt => {
               avg = avg.add(v[pt]);
-              if (v[pt].distanceFrom(c) < closest.distanceFrom(c)) closest = v[pt];
             });
             avg = avg.x(1/poly.points.length);
 
             return {
               dist:avg.distanceFrom(c),
-              // dist:avg.add(closest).x(0.5).distanceFrom(c),
               poly
             }
           });
