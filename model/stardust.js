@@ -15,7 +15,7 @@ class Stardust extends createjs.DisplayObject {
         game.removeChild(star);
       }
     });
-    while(this.stars.length < Math.pow(this.radius, 3) * 2 * Math.PI * this.density) {
+    while(this.stars.length < Math.pow(this.radius, 3) * 4/3 * Math.PI * this.density) {
       let pos = $V([
         Math.randFloat(-1, 1), Math.randFloat(-1, 1), Math.randFloat(-1, 1)
       ]).toUnitVector().x(this.radius).add(game.camera.position);

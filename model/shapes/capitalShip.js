@@ -4,7 +4,7 @@ class CapitalShip extends Shape3D {
     super(x,y,z);
     this.forceRender = true;
     this.border = "#EEE";
-    this.inner = "#555";
+    this.inner = null;
 
     // VERTICES -----------------------------------------------------
     // Main hull
@@ -106,7 +106,7 @@ class CapitalShip extends Shape3D {
     this.addPolygon([39,41,43]);
     this.addPolygon([40,42,43]);
     this.addPolygon([41,42,43]);
-    this.border = "#EEE"; this.inner = "#555";
+    this.border = "#EEE"; this.inner = null;
     // Com array
     this.addPolygon([44,45,49,48]); // base sides
     this.addPolygon([46,47,51,50]);
@@ -124,6 +124,6 @@ class CapitalShip extends Shape3D {
   }
 
   update (e) {
-    this.rotate(0,0,e.delta/5000);
+    // this.rotate(0,0,e.delta/5000);
   }
 }

@@ -6,6 +6,7 @@ class Shape3D extends Object3D {
     this.polygons = [];
     this.edges    = [];
     this.forceRender = false;
+    this.isShape = true;
   }
 
   update (e) {

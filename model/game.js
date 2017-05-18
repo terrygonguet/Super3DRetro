@@ -13,6 +13,7 @@ class Game extends createjs.Stage {
     this.txtrendertime= new QuickText({ x: 10, y: 50 });
     this.camera       = new Camera(this);
     this.objects3D    = [];
+    this.shapes       = [];
     this.stardust     = new Stardust();
     this.player       = new Spaceship(0,0,0);
     this.nbRendered   = 0;
@@ -35,6 +36,7 @@ class Game extends createjs.Stage {
 
     this.on("tick", e => {
       this.addChild(new CapitalShip(1300,0,-300));
+      // this.addChild(new Cube(500,0,0,200));
     }, null, true);
   }
 
@@ -43,30 +45,34 @@ class Game extends createjs.Stage {
     this.txtrendered.text = this.nbRendered + " Objects rendered";
     this.nbRendered = 0;
     this.rendertime = 0;
+    let time = performance.now();
     if (!e.paused) {
-      let time = performance.now();
       super.update(e);
       this.camera.update(e);
       this.camera.render(e);
-      let sorted = this.objects3D.map(obj => {
+      let sorted = this.shapes.map(obj => {
         return { dist:obj.position.distanceFrom(this.camera.position), obj };
       });
       sorted = _.sortBy(sorted, 'dist').map(obj => obj.obj);
       sorted.reverse();
       sorted.forEach(child => child.update(e));
       sorted.forEach(child => child.render(this.camera));
-      this.rendertime += (performance.now() - time);
+      this.objects3D.forEach(child => child.update && child.update(e));
+      this.objects3D.forEach(child => child.render(this.camera));
     }
+    game.rendertime += (performance.now() - time);
     this.txtrendertime.text = this.rendertime.toPrecision(3) + " ms render time";
   }
 
   addChild (child) {
-    if (child instanceof Object3D) this.objects3D.push(child);
+    if (child.isShape) this.shapes.push(child);
+    else if (child.is3D) this.objects3D.push(child);
     super.addChild(child);
   }
 
   removeChild (child) {
-    if (child instanceof Object3D) this.objects3D.splice(this.objects3D.indexOf(child), 1);
+    if (child.isShape) this.shapes.splice(this.shapes.indexOf(child), 1);
+    if (child.is3D) this.objects3D.splice(this.objects3D.indexOf(child), 1);
     super.removeChild(child);
   }
 
