@@ -102,11 +102,24 @@ class Camera extends createjs.Shape {
     return this;
   }
 
+  drawCircle (coords, radius, force=false) {
+    let dispCoords = (force ? this.forceGetDispCoords(coords) : this.getDispCoords(coords));
+    if (dispCoords) {
+      game.nbRendered++;
+      this.graphics.dc(
+        dispCoords.x, dispCoords.y,
+        radius*(1-this.position.distanceFrom(coords)/2000).clamp(0.3,radius)
+      );
+    }
+    return this;
+  }
+
   drawPoly (points, force=false) {
     let coords = points.map(pt => {
-      game.nbRendered++;
       return (force ? this.forceGetDispCoords(pt) : this.getDispCoords(pt));
     });
+    if (!coords[0]) return;
+    game.nbRendered++;
     this.graphics.mt(coords[0].x, coords[0].y);
     coords.shift();
     coords.forEach(pt => this.graphics.lt(pt.x, pt.y));

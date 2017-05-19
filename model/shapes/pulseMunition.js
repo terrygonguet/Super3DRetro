@@ -34,13 +34,7 @@ class PulseMunition extends Shape3D {
   }
 
   impact (pos) {
-    let impact = new Point3D(pos.e(1), pos.e(2), pos.e(3), "#11E");
-    this.alpha = 2;
-    impact.update = function (e) {
-      this.border = "rgba(238,17,17," + this.alpha + ")";
-      if (this.alpha <= 0) game.removeChild(this);
-      this.alpha -= e.delta / 1000;
-    };
+    let impact = new Impact(pos.e(1), pos.e(2), pos.e(3), 50, this.border);
     game.addChild(impact);
   }
 

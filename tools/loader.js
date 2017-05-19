@@ -48,6 +48,7 @@ const debug = false;
     {id: "Spaceship", src:"model/shapes/spaceship.js"},
     {id: "CapitalShip", src:"model/shapes/capitalShip.js"},
     {id: "PulseMunition", src:"model/shapes/pulseMunition.js"},
+    {id: "Impact", src:"model/shapes/impact.js"},
     {id: "Indicator", src:"model/indic.js"},
     {id: "Stardust", src:"model/stardust.js"},
     {id: "Camera", src:"model/camera.js"}
