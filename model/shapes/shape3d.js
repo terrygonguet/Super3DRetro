@@ -34,18 +34,11 @@ class Shape3D extends Object3D {
           });
         distances = _.sortBy(distances, 'dist').reverse();
         distances
-          .map(poly => {
-            return {
-              border: poly.poly.border,
-              inner: poly.poly.inner,
-              points: poly.poly.points.map(pt => v[pt])
-            };
-          })
           .forEach(poly =>
             camera
-              .color(poly.border, poly.inner)
+              .color(poly.poly.border, poly.poly.inner)
               .drawPoly(
-                poly.points,
+                poly.poly.getGlobals(),
                 this.forceRender
               )
           );
@@ -104,14 +97,10 @@ class Shape3D extends Object3D {
     return this.vertices.length - 1;
   }
 
-  addPolygon(points, borderColor, innerColor) {
+  addPolygon(points, borderColor=this.border, innerColor=this.inner) {
     let correct = points.length >= 3 && !points.some(pt => !this.vertices[pt]);
     if (correct) {
-      this.polygons.push({
-        points,
-        border: borderColor || this.border,
-        inner: innerColor || this.inner
-      });
+      this.polygons.push(new Polygon(this, points, borderColor, innerColor));
     }
   }
 
@@ -123,6 +112,34 @@ class Shape3D extends Object3D {
         color: (color || this.border)
       });
     }
+  }
+
+}
+
+class Polygon {
+
+  constructor(shape, points, borderColor, innerColor) {
+    this.points = points;
+    this.border = borderColor;
+    this.inner = innerColor;
+    this.shape = shape;
+  }
+
+  getGlobals() {
+    return this.points.map(pt => this.shape.vertices[pt]);
+  }
+
+  intersects (line) {
+    const points = this.getGlobals();
+    const plane = $P(points[0], points[1], points[2]);
+    if (plane.contains(point)) {
+      let hit2points = points.map(pt => v[pt].subtract(hit));
+      let angle = 0;
+      for (var i = 0; i < hit2points.length; i++) {
+        angle += hit2points[i].angleFrom(hit2points[(i<hit2points.length-1 ? i+1 : 0)]);
+      }
+      return Math.abs(angle-Math.PI*2) <= 0.01;
+    } else return false;
   }
 
 }

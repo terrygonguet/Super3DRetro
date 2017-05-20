@@ -9,6 +9,7 @@ class Camera extends createjs.Shape {
     this.fovW          = Math.PI / 2;
     this.fovH          = this.fovW * (game.canvas.height / game.canvas.width);
     this.transferMatrix= null;
+    this.coordsCache   = null;
   }
 
   update (e) {
@@ -39,15 +40,16 @@ class Camera extends createjs.Shape {
 
   render (camera) {
     this.graphics.c();
+    this.coordsCache = {};
   }
 
   move (vect) {
     this.position = this.position.add(vect);
   }
 
-  getDispCoords (point3d) {
-    let retval = false;
-    if (point3d.subtract(this.position).angleFrom(this.i) < this.fovW / 2) {
+  getDispCoords (point3d, force=false) {
+    let retval = false;//this.coordsCache[point3d.inspect()];
+    if (force || point3d.subtract(this.position).angleFrom(this.i) < this.fovW / 2) {
       let camCoords = this.transferMatrix.x(point3d.subtract(this.position));
       let angleX = $V([camCoords.e(1), camCoords.e(2), 0]).angleFrom(Vector.i);
       let angleY = $V([camCoords.e(1), 0, camCoords.e(3)]).angleFrom(Vector.i);
@@ -56,19 +58,9 @@ class Camera extends createjs.Shape {
         x: (angleX*Math.PI/this.fovW*Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
         y: (angleY*Math.PI/this.fovH*Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
       };
+      // this.coordsCache[point3d.inspect()] = retval;
     }
     return retval;
-  }
-
-  forceGetDispCoords (point3d) {
-    let camCoords = this.transferMatrix.x(point3d.subtract(this.position));
-    let angleX = $V([camCoords.e(1), camCoords.e(2), 0]).angleFrom(Vector.i);
-    let angleY = $V([camCoords.e(1), 0, camCoords.e(3)]).angleFrom(Vector.i);
-
-    return {
-      x: (angleX*Math.PI/this.fovW*Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
-      y: (angleY*Math.PI/this.fovH*Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
-    };
   }
 
   color(border, inner) {
@@ -86,24 +78,17 @@ class Camera extends createjs.Shape {
   }
 
   drawLine (ptFrom, ptTo, force=false) {
-    if (force) {
-      let a = this.forceGetDispCoords(ptFrom);
-      let b = this.forceGetDispCoords(ptTo);
+    let a = this.getDispCoords(ptFrom, force);
+    let b = this.getDispCoords(ptTo, force);
+    if (a && b) {
       game.nbRendered++;
       this.graphics.mt(a.x, a.y).lt(b.x, b.y);
-    } else {
-      let a = this.getDispCoords(ptFrom);
-      let b = this.getDispCoords(ptTo);
-      if (a && b) {
-        game.nbRendered++;
-        this.graphics.mt(a.x, a.y).lt(b.x, b.y);
-      }
     }
     return this;
   }
 
   drawCircle (coords, radius, force=false) {
-    let dispCoords = (force ? this.forceGetDispCoords(coords) : this.getDispCoords(coords));
+    let dispCoords = this.getDispCoords(coords, force);
     if (dispCoords) {
       game.nbRendered++;
       this.graphics.dc(
@@ -116,7 +101,7 @@ class Camera extends createjs.Shape {
 
   drawPoly (points, force=false) {
     let coords = points.map(pt => {
-      return (force ? this.forceGetDispCoords(pt) : this.getDispCoords(pt));
+      return this.getDispCoords(pt, force);
     });
     if (!coords[0]) return;
     game.nbRendered++;
