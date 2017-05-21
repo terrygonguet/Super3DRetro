@@ -51,7 +51,8 @@ const debug = false;
     {id: "Impact", src:"model/shapes/impact.js"},
     {id: "Indicator", src:"model/indic.js"},
     {id: "Stardust", src:"model/stardust.js"},
-    {id: "Camera", src:"model/camera.js"}
+    {id: "Camera", src:"model/camera.js"},
+    {id: "ShieldGroup", src:"model/shieldgroup.js"}
 
     // Sprites ----------------------------------------
 

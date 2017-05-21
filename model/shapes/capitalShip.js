@@ -6,6 +6,8 @@ class CapitalShip extends Shape3D {
     this.border = "#EEE";
     this.inner = null;//"#111";
 
+    this.addShieldgroup("hull");
+
     // VERTICES -----------------------------------------------------
     // Main hull
     this.addVertex($V([-500, -200, -100])); // backside top left 0
@@ -74,13 +76,13 @@ class CapitalShip extends Shape3D {
 
     // POLYGONS -----------------------------------------------------
     // Main hull
-    this.addPolygon([0,2,4,3]); // backside
-    this.addPolygon([0,3,8,5]); // sides
-    this.addPolygon([2,4,9,7]);
-    this.addPolygon([5,7,9,8]); // front
-    this.addPolygon([0,2,6,1]); // top
-    this.addPolygon([6,1,5,7]);
-    this.addPolygon([3,4,9,8]); // bottom
+    this.addPolygon([0,2,4,3]).addToShieldgroup("hull"); // backside
+    this.addPolygon([0,3,8,5]).addToShieldgroup("hull"); // sides
+    this.addPolygon([2,4,9,7]).addToShieldgroup("hull");
+    this.addPolygon([5,7,9,8]).addToShieldgroup("hull"); // front
+    this.addPolygon([0,2,6,1]).addToShieldgroup("hull"); // top
+    this.addPolygon([6,1,5,7]).addToShieldgroup("hull");
+    this.addPolygon([3,4,9,8]).addToShieldgroup("hull"); // bottom
     // Bridge
     this.addPolygon([10,11,15,14]); // foot front
     this.addPolygon([12,13,17,16]); // foot back

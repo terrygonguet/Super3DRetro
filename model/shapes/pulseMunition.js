@@ -54,6 +54,7 @@ class PulseMunition extends Shape3D {
         if (hit && hit.distanceFrom(pos) <= dist) {
           cont = false;
           this.impact(hit);
+          poly.getHit(5);
           game.removeChild(this);
         }
       });
