@@ -12,6 +12,31 @@ class Shape3D extends Object3D {
   update (e) {
 
   }
+  /*
+
+  this.polygons.forEach((poly,i) => poly.i = i);
+  this.polygons
+    .sort((a,b) => {
+      for (let pt of a.getGlobals()) {
+        let line = $L(c, pt.subtract(c));
+        let hit = b.intersects(line);
+        if (hit && hit.distanceFrom(c) > pt.distanceFrom(c)) {
+          return -1;
+        }
+      }
+      for (let pt of b.getGlobals()) {
+        let line = $L(c, pt.subtract(c));
+        let hit = a.intersects(line);
+        if (hit && hit.distanceFrom(c) > pt.distanceFrom(c)) {
+          return 1;
+        }
+      }
+      return a.i - b.i;
+    })
+    .forEach(poly => {
+      camera.color(poly.border, poly.inner).drawPoly(poly.getGlobals(), this.forceRender);
+    });
+  */
 
   render (camera) {
     let v = this.vertices, c = camera.position; // shorthands
@@ -42,7 +67,6 @@ class Shape3D extends Object3D {
                 this.forceRender
               )
           );
-
       }
       if (this.edges.length)
         this.edges.forEach(edge =>
@@ -132,13 +156,14 @@ class Polygon {
   intersects (line) {
     const points = this.getGlobals();
     const plane = $P(points[0], points[1], points[2]);
-    if (plane.contains(point)) {
-      let hit2points = points.map(pt => v[pt].subtract(hit));
+    const hit = plane.intersectionWith(line);
+    if (hit) {
+      let hit2points = points.map(pt => pt.subtract(hit));
       let angle = 0;
       for (var i = 0; i < hit2points.length; i++) {
         angle += hit2points[i].angleFrom(hit2points[(i<hit2points.length-1 ? i+1 : 0)]);
       }
-      return Math.abs(angle-Math.PI*2) <= 0.01;
+      return (Math.abs(angle-Math.PI*2) <= 0.01 ? hit : false);
     } else return false;
   }
 

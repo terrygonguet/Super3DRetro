@@ -50,23 +50,11 @@ class PulseMunition extends Shape3D {
       ) return;
       const v = obj.vertices; // shorthand
       obj.polygons && obj.polygons.forEach(poly => {
-        let plane = $P(
-          v[poly.points[0]],
-          v[poly.points[1]],
-          v[poly.points[2]]
-        );
-        let hit = plane.intersectionWith(line);
-        if (hit && pos.distanceFrom(hit) <= dist) {
-          let hit2points = poly.points.map(pt => v[pt].subtract(hit));
-          let angle = 0;
-          for (var i = 0; i < hit2points.length; i++) {
-            angle += hit2points[i].angleFrom(hit2points[(i<hit2points.length-1 ? i+1 : 0)]);
-          }
-          if (Math.abs(angle-Math.PI*2) <= 0.01) {
-            game.removeChild(this);
-            cont = false;
-            this.impact(hit);
-          }
+        let hit = poly.intersects(line);
+        if (hit && hit.distanceFrom(pos) <= dist) {
+          cont = false;
+          this.impact(hit);
+          game.removeChild(this);
         }
       });
     });

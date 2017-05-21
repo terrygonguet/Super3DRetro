@@ -4,7 +4,7 @@ class CapitalShip extends Shape3D {
     super(x,y,z);
     this.forceRender = true;
     this.border = "#EEE";
-    this.inner = null;
+    this.inner = null;//"#111";
 
     // VERTICES -----------------------------------------------------
     // Main hull
@@ -124,6 +124,6 @@ class CapitalShip extends Shape3D {
   }
 
   update (e) {
-    // this.rotate(0,0,e.delta/5000);
+    this.rotate(0,0,e.delta/5000);
   }
 }
