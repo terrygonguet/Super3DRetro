@@ -7,6 +7,9 @@ class CapitalShip extends Shape3D {
     this.inner = null;//"#111";
 
     this.addShieldgroup("hull");
+    this.addShieldgroup("bridge");
+    this.addShieldgroup("thrusters");
+    this.addShieldgroup("com");
 
     // VERTICES -----------------------------------------------------
     // Main hull
@@ -84,21 +87,22 @@ class CapitalShip extends Shape3D {
     this.addPolygon([6,1,5,7]).addToShieldgroup("hull");
     this.addPolygon([3,4,9,8]).addToShieldgroup("hull"); // bottom
     // Bridge
-    this.addPolygon([10,11,15,14]); // foot front
-    this.addPolygon([12,13,17,16]); // foot back
-    this.addPolygon([11,13,17,15]); // foot sides
-    this.addPolygon([10,12,16,14]);
-    this.addPolygon([20,21,25,24]); // bridge back
-    this.addPolygon([18,19,23,22]); // bridge front
-    this.addPolygon([18,20,24,22]); // bridge sides
-    this.addPolygon([19,21,25,23]);
-    this.addPolygon([22,23,25,24]); // bridge top
-    this.addPolygon([18,19,21,20]); // bridge bottom
+    this.addPolygon([10,11,15,14]).addToShieldgroup("bridge"); // foot front
+    this.addPolygon([12,13,17,16]).addToShieldgroup("bridge"); // foot back
+    this.addPolygon([11,13,17,15]).addToShieldgroup("bridge"); // foot sides
+    this.addPolygon([10,12,16,14]).addToShieldgroup("bridge");
+    this.addPolygon([20,21,25,24]).addToShieldgroup("bridge"); // bridge back
+    this.addPolygon([18,19,23,22]).addToShieldgroup("bridge"); // bridge front
+    this.addPolygon([18,20,24,22]).addToShieldgroup("bridge"); // bridge sides
+    this.addPolygon([19,21,25,23]).addToShieldgroup("bridge");
+    this.addPolygon([22,23,25,24]).addToShieldgroup("bridge"); // bridge top
+    this.addPolygon([18,19,21,20]).addToShieldgroup("bridge"); // bridge bottom
     // Thrusters
-    this.addPolygon([26,27,31,30]); // sides
-    this.addPolygon([28,29,33,32]);
-    this.addPolygon([26,28,32,30]);
-    this.addPolygon([27,29,33,31]);
+    this.addPolygon([26,27,31,30]).addToShieldgroup("thrusters"); // sides
+    this.addPolygon([28,29,33,32]).addToShieldgroup("thrusters");
+    this.addPolygon([26,28,32,30]).addToShieldgroup("thrusters");
+    this.addPolygon([27,29,33,31]).addToShieldgroup("thrusters");
+    this.addPolygon([30,31,33,32]).addToShieldgroup("thrusters");
     this.border = "#ED1C1C"; this.inner = "rgba(189,43,43,0.2)";
     this.addPolygon([34,35,38]); // flame1
     this.addPolygon([34,36,38]);
@@ -110,19 +114,19 @@ class CapitalShip extends Shape3D {
     this.addPolygon([41,42,43]);
     this.border = "#EEE"; this.inner = null;
     // Com array
-    this.addPolygon([44,45,49,48]); // base sides
-    this.addPolygon([46,47,51,50]);
-    this.addPolygon([44,46,50,48]);
-    this.addPolygon([45,47,51,49]);
-    this.addPolygon([48,49,51,50]); // base top
-    this.addPolygon([52,53,49,48]); // parabola
-    this.addPolygon([54,55,50,48]);
-    this.addPolygon([56,57,51,49]);
-    this.addPolygon([58,59,51,50]);
-    this.addPolygon([52,54,48]);
-    this.addPolygon([53,56,49]);
-    this.addPolygon([55,58,50]);
-    this.addPolygon([57,59,51]);
+    this.addPolygon([44,45,49,48]).addToShieldgroup("com"); // base sides
+    this.addPolygon([46,47,51,50]).addToShieldgroup("com");
+    this.addPolygon([44,46,50,48]).addToShieldgroup("com");
+    this.addPolygon([45,47,51,49]).addToShieldgroup("com");
+    this.addPolygon([48,49,51,50]).addToShieldgroup("com"); // base top
+    this.addPolygon([52,53,49,48]).addToShieldgroup("com"); // parabola
+    this.addPolygon([54,55,50,48]).addToShieldgroup("com");
+    this.addPolygon([56,57,51,49]).addToShieldgroup("com");
+    this.addPolygon([58,59,51,50]).addToShieldgroup("com");
+    this.addPolygon([52,54,48]).addToShieldgroup("com");
+    this.addPolygon([53,56,49]).addToShieldgroup("com");
+    this.addPolygon([55,58,50]).addToShieldgroup("com");
+    this.addPolygon([57,59,51]).addToShieldgroup("com");
   }
 
   update (e) {
