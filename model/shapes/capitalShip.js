@@ -127,6 +127,21 @@ class CapitalShip extends Shape3D {
     this.addPolygon([53,56,49]).addToShieldgroup("com");
     this.addPolygon([55,58,50]).addToShieldgroup("com");
     this.addPolygon([57,59,51]).addToShieldgroup("com");
+
+    this.addTurret(330, 0, -110);
+    this.addTurret(170, 0, -110);
+    this.addTurret(250, -80, -110);
+    this.addTurret(250, 80, -110);
+  }
+
+  addTurret (x, y, z) {
+    const tur = new Turret(
+      this.position.e(1) + x,
+      this.position.e(2) + y,
+      this.position.e(3) - z
+    );
+    this.attach(tur);
+    game.addChild(tur);
   }
 
   update (e) {

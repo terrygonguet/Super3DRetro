@@ -40,7 +40,7 @@ class Game extends createjs.Stage {
       this.addChild(this.player);
       this.ui = new UI();
       this.addChildAt(this.ui, this.children.length-1);
-      // this.addChild(new Cube(500,0,0,200));
+      this.addChild(new Turret(200,0,0));
     }, null, true);
   }
 

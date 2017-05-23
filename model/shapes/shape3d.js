@@ -6,6 +6,7 @@ class Shape3D extends Object3D {
     this.polygons = [];
     this.edges    = [];
     this.shields  = {};
+    this.attached = [];
     this.forceRender = false;
     this.isShape = true;
   }
@@ -51,9 +52,19 @@ class Shape3D extends Object3D {
     }
   }
 
+  attach (shape) {
+    shape.isShape && this.attached.push(shape);
+  }
+
+  detach (shape) {
+    let i = this.attached.indexOf(shape);
+    i !== -1 && this.attached.splice(i, 1);
+  }
+
   move (vect) {
     this.position = this.position.add(vect);
     this.vertices = this.vertices.map(vertex => vertex.add(vect));
+    this.attached.forEach(shape => shape.move(vect));
   }
 
   rotate (angleI, angleJ, angleK) {

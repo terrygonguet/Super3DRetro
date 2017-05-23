@@ -6,6 +6,7 @@ class UI extends createjs.Container {
     this.uY = 0.01 * window.innerHeight;
 
     this.setShieldUI();
+    this.setCrosshair();
 
     game.on("tick", e => this.update(e));
   }
@@ -54,6 +55,17 @@ class UI extends createjs.Container {
     this.addChild(this.meters);
     this.addChild(this.txtenthropy);
     this.addChild(this.enthropyGauge);
+  }
+
+  setCrosshair () {
+    this.crosshair = new createjs.Shape();
+    let coords = game.camera.getDispCoords(game.player.position.add(game.player.i.x(100000)));
+    this.crosshair.set({
+      x: coords.x, y: coords.y
+    });
+    this.crosshair.graphics.s("#E11").dc(0,0,10);
+
+    this.addChild(this.crosshair);
   }
 
   update (e) {

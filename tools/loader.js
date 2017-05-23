@@ -40,7 +40,7 @@ const debug = false;
     {id: "Tools", src:"tools/tools.js"},
     {id: "Input Manager", src:"tools/input.js"},
     {id: "Game", src:"model/game.js"},
-    {id: "QuickText", src:"model/quickText.js"},
+
     {id: "Object3D", src:"model/shapes/object3d.js"},
     {id: "Shape3D", src:"model/shapes/shape3d.js"},
     {id: "Point3D", src:"model/shapes/point3d.js"},
@@ -49,6 +49,9 @@ const debug = false;
     {id: "CapitalShip", src:"model/shapes/capitalShip.js"},
     {id: "PulseMunition", src:"model/shapes/pulseMunition.js"},
     {id: "Impact", src:"model/shapes/impact.js"},
+    {id: "Turret", src:"model/shapes/turret.js"},
+
+    {id: "QuickText", src:"model/quickText.js"},
     {id: "Indicator", src:"model/indic.js"},
     {id: "Stardust", src:"model/stardust.js"},
     {id: "Camera", src:"model/camera.js"},

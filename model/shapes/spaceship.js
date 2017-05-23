@@ -64,6 +64,8 @@ class Spaceship extends Shape3D {
     this.addVertex($V([-10,0,-2])); // thruster bottom right 14
     this.addVertex($V([-20,0,0])); // thruster flame 15
 
+    // this.addVertex($V([100000,0,0])); // 16
+
     this.addPolygon([0,1,3,2]).addToShieldgroup("default"); // backside
     this.addPolygon([0,2,4]).addToShieldgroup("default"); // backside to wings
     this.addPolygon([1,3,5]).addToShieldgroup("default");
@@ -84,6 +86,8 @@ class Spaceship extends Shape3D {
     this.addPolygon([11,13,15]);
     this.addPolygon([13,14,15]);
     this.addPolygon([14,12,15]);
+
+    // this.addEdge(6,16,"rgba(0,0,0,0)");
 
     // this.rotate(0,-Math.PI/2,0);
   }
@@ -141,6 +145,7 @@ class Spaceship extends Shape3D {
       ));
       this.blasterSide = -this.blasterSide;
     }
+    // this.edges[0].color = (input.keys.mouse1 ? "rgba(255,17,17,0.3)" : null);
     // game.camera.position = this.position.add(this.cameraOffset);
     // if (this.autorotate) {
     //   this.rotate(Math.PI / 7000 * e.delta,0,0);

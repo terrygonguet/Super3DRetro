@@ -48,7 +48,7 @@ class PulseMunition extends Shape3D {
       if (
         !cont ||
         (obj === game.player && this.type === "player") ||
-        (this.type === "enemy" && obj !== game.player) ||
+        (obj !== game.player && this.type === "enemy") ||
         pos.distanceFrom(obj.position) >= 2000 ||
         obj.isPulsemun
       ) return;

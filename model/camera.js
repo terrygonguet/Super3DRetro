@@ -8,7 +8,11 @@ class Camera extends createjs.Shape {
     this.k             = Vector.k.x(-1);
     this.fovW          = Math.PI / 2;
     this.fovH          = this.fovW * (game.canvas.height / game.canvas.width);
-    this.transferMatrix= null;
+    this.transferMatrix= $M([
+      [this.i.e(1), this.i.e(2), this.i.e(3)],
+      [this.j.e(1), this.j.e(2), this.j.e(3)],
+      [this.k.e(1), this.k.e(2), this.k.e(3)]
+    ]);
     this.coordsCache   = null;
   }
 
