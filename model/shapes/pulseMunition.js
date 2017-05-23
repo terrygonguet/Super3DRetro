@@ -33,9 +33,12 @@ class PulseMunition extends Shape3D {
     if (this.position.distanceFrom(game.camera.position) > 50000) game.removeChild(this);
   }
 
-  impact (pos) {
-    let impact = new Impact(pos.e(1), pos.e(2), pos.e(3), 50, this.border);
+  impact (pos, poly) {
+    let type = (poly.shieldGroup && poly.shieldGroup.working ? "circle" : "point");
+    let impact = new Impact(pos.e(1), pos.e(2), pos.e(3), 50, this.border, type);
+    poly.getHit(5);
     game.addChild(impact);
+    game.removeChild(this);
   }
 
   collide (pos, dist) {
@@ -45,6 +48,7 @@ class PulseMunition extends Shape3D {
       if (
         !cont ||
         (obj === game.player && this.type === "player") ||
+        (this.type === "enemy" && obj !== game.player) ||
         pos.distanceFrom(obj.position) >= 2000 ||
         obj.isPulsemun
       ) return;
@@ -53,9 +57,7 @@ class PulseMunition extends Shape3D {
         let hit = poly.intersects(line);
         if (hit && hit.distanceFrom(pos) <= dist) {
           cont = false;
-          this.impact(hit);
-          poly.getHit(5);
-          game.removeChild(this);
+          this.impact(hit, poly);
         }
       });
     });

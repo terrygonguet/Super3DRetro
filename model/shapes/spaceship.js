@@ -27,6 +27,7 @@ class Spaceship extends Shape3D {
       } else {
         this.dblTap = { key: e.original.key, time: 200 };
       }
+      if (e.original.key === "p") this.shields["default"].getHit(5);
     });
 
     this.on("tick", () => {
@@ -42,6 +43,8 @@ class Spaceship extends Shape3D {
           break;
       }
     });
+
+    this.addShieldgroup("default");
 
     this.addVertex($V([-10,-5,3])); // backside top left 0
     this.addVertex($V([-10,5,3])); // backside top right 1
@@ -61,21 +64,21 @@ class Spaceship extends Shape3D {
     this.addVertex($V([-10,0,-2])); // thruster bottom right 14
     this.addVertex($V([-20,0,0])); // thruster flame 15
 
-    this.addPolygon([0,1,3,2]); // backside
-    this.addPolygon([0,2,4]); // backside to wings
-    this.addPolygon([1,3,5]);
-    this.addPolygon([4,7,9]); // wings thin
-    this.addPolygon([5,8,10]);
-    this.addPolygon([0,4,9]); // wings thick
-    this.addPolygon([2,4,9]);
-    this.addPolygon([1,5,10]);
-    this.addPolygon([3,5,10]);
-    this.addPolygon([0,1,6]); // top hull
-    this.addPolygon([0,9,6]);
-    this.addPolygon([1,10,6]);
-    this.addPolygon([2,3,6]); // bottom hull
-    this.addPolygon([2,9,6]);
-    this.addPolygon([3,10,6]);
+    this.addPolygon([0,1,3,2]).addToShieldgroup("default"); // backside
+    this.addPolygon([0,2,4]).addToShieldgroup("default"); // backside to wings
+    this.addPolygon([1,3,5]).addToShieldgroup("default");
+    this.addPolygon([4,7,9]).addToShieldgroup("default"); // wings thin
+    this.addPolygon([5,8,10]).addToShieldgroup("default");
+    this.addPolygon([0,4,9]).addToShieldgroup("default"); // wings thick
+    this.addPolygon([2,4,9]).addToShieldgroup("default");
+    this.addPolygon([1,5,10]).addToShieldgroup("default");
+    this.addPolygon([3,5,10]).addToShieldgroup("default");
+    this.addPolygon([0,1,6]).addToShieldgroup("default"); // top hull
+    this.addPolygon([0,9,6]).addToShieldgroup("default");
+    this.addPolygon([1,10,6]).addToShieldgroup("default");
+    this.addPolygon([2,3,6]).addToShieldgroup("default"); // bottom hull
+    this.addPolygon([2,9,6]).addToShieldgroup("default");
+    this.addPolygon([3,10,6]).addToShieldgroup("default");
     this.border = "#1E6CD9"; this.inner = "rgba(30,108,217,0.2)";
     this.addPolygon([11,12,15]); // thruster
     this.addPolygon([11,13,15]);

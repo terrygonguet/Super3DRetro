@@ -52,7 +52,8 @@ const debug = false;
     {id: "Indicator", src:"model/indic.js"},
     {id: "Stardust", src:"model/stardust.js"},
     {id: "Camera", src:"model/camera.js"},
-    {id: "ShieldGroup", src:"model/shieldgroup.js"}
+    {id: "ShieldGroup", src:"model/shieldgroup.js"},
+    {id: "UI", src:"model/ui.js"}
 
     // Sprites ----------------------------------------
 

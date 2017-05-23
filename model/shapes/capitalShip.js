@@ -130,6 +130,6 @@ class CapitalShip extends Shape3D {
   }
 
   update (e) {
-    this.rotate(0,0,e.delta/5000);
+    // this.rotate(0,0,e.delta/5000);
   }
 }

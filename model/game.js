@@ -15,7 +15,8 @@ class Game extends createjs.Stage {
     this.objects3D    = [];
     this.shapes       = [];
     this.stardust     = new Stardust();
-    this.player       = new Spaceship(0,0,0);
+    this.player       = null;
+    this.ui           = null;
     this.nbRendered   = 0;
     this.rendertime   = 0;
 
@@ -26,7 +27,6 @@ class Game extends createjs.Stage {
     this.addChild(this.txtrendertime);
     this.addChild(this.camera);
     this.addChild(this.stardust);
-    this.addChild(this.player);
   }
 
   setHandlers () {
@@ -36,6 +36,10 @@ class Game extends createjs.Stage {
 
     this.on("tick", e => {
       this.addChild(new CapitalShip(1300,0,-300));
+      this.player = new Spaceship(0,0,0);
+      this.addChild(this.player);
+      this.ui = new UI();
+      this.addChildAt(this.ui, this.children.length-1);
       // this.addChild(new Cube(500,0,0,200));
     }, null, true);
   }
