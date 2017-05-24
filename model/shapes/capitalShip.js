@@ -6,10 +6,12 @@ class CapitalShip extends Shape3D {
     this.border = "#EEE";
     this.inner = null;//"#111";
 
-    this.addShieldgroup("hull");
-    this.addShieldgroup("bridge");
-    this.addShieldgroup("thrusters");
-    this.addShieldgroup("com");
+    this.addShieldgroup("hull", Infinity);
+    this.shields["hull"].dissipationRate = 1;
+    this.shields["hull"].regenRate = 30;
+    this.addShieldgroup("bridge", 5);
+    this.addShieldgroup("thrusters", 5);
+    this.addShieldgroup("com", 5);
 
     // VERTICES -----------------------------------------------------
     // Main hull
@@ -103,16 +105,16 @@ class CapitalShip extends Shape3D {
     this.addPolygon([26,28,32,30]).addToShieldgroup("thrusters");
     this.addPolygon([27,29,33,31]).addToShieldgroup("thrusters");
     this.addPolygon([30,31,33,32]).addToShieldgroup("thrusters");
-    this.border = "#ED1C1C"; this.inner = "rgba(189,43,43,0.2)";
-    this.addPolygon([34,35,38]); // flame1
-    this.addPolygon([34,36,38]);
-    this.addPolygon([35,37,38]);
-    this.addPolygon([36,37,38]);
-    this.addPolygon([39,40,43]); // flame2
-    this.addPolygon([39,41,43]);
-    this.addPolygon([40,42,43]);
-    this.addPolygon([41,42,43]);
-    this.border = "#EEE"; this.inner = null;
+
+    this.addPolygon([34,35,38], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters"); // flame1
+    this.addPolygon([34,36,38], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters");
+    this.addPolygon([35,37,38], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters");
+    this.addPolygon([36,37,38], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters");
+    this.addPolygon([39,40,43], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters"); // flame2
+    this.addPolygon([39,41,43], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters");
+    this.addPolygon([40,42,43], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters");
+    this.addPolygon([41,42,43], "#ED1C1C", "rgba(189,43,43,0.2)", true, true).addToShieldgroup("thrusters");
+
     // Com array
     this.addPolygon([44,45,49,48]).addToShieldgroup("com"); // base sides
     this.addPolygon([46,47,51,50]).addToShieldgroup("com");

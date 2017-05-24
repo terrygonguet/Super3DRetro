@@ -5,6 +5,7 @@ class UI extends createjs.Container {
     this.uX = 0.01 * window.innerWidth;
     this.uY = 0.01 * window.innerHeight;
 
+    this.crosshair = new createjs.Shape();
     this.setShieldUI();
     this.setCrosshair();
 
@@ -58,12 +59,28 @@ class UI extends createjs.Container {
   }
 
   setCrosshair () {
-    this.crosshair = new createjs.Shape();
-    let coords = game.camera.getDispCoords(game.player.position.add(game.player.i.x(100000)));
+    let coords = null;
+    for (let shape of game.shapes) {
+      if (shape === game.player) continue;
+      if (game.player.i.angleFrom(shape.position.subtract(game.player.position)) <= Math.PI) {
+        for (let poly of shape.polygons) {
+          coords = poly.intersects($L(game.player.position, game.player.i));
+          if (coords) break;
+        }
+      }
+      if (coords) break;
+    }
+
+    if (!coords) {
+      coords = game.camera.getDispCoords(game.player.position.add(game.player.i.x(10000)));
+    } else {
+      coords = game.camera.getDispCoords(coords);
+    }
+
     this.crosshair.set({
       x: coords.x, y: coords.y
     });
-    this.crosshair.graphics.s("#E11").dc(0,0,10);
+    this.crosshair.graphics.c().ss(1).s("#E11").dc(0,0,10);
 
     this.addChild(this.crosshair);
   }
@@ -75,6 +92,9 @@ class UI extends createjs.Container {
     this.shieldBubble.graphics
       .c().s("#44E").f("rgba(17,17,255,0.2)")
       .dc(this.bottomLeft.e(1), this.bottomLeft.e(2), 10 * this.uX * ratio);
+    this.txtenthropy.color = (shield.working ? "#EEE" : "#E11");
+
+    this.setCrosshair();
   }
 
 }

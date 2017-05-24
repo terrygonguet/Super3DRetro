@@ -44,7 +44,7 @@ class Spaceship extends Shape3D {
       }
     });
 
-    this.addShieldgroup("default");
+    this.addShieldgroup("default", 1);
 
     this.addVertex($V([-10,-5,3])); // backside top left 0
     this.addVertex($V([-10,5,3])); // backside top right 1
@@ -81,11 +81,11 @@ class Spaceship extends Shape3D {
     this.addPolygon([2,3,6]).addToShieldgroup("default"); // bottom hull
     this.addPolygon([2,9,6]).addToShieldgroup("default");
     this.addPolygon([3,10,6]).addToShieldgroup("default");
-    this.border = "#1E6CD9"; this.inner = "rgba(30,108,217,0.2)";
-    this.addPolygon([11,12,15]); // thruster
-    this.addPolygon([11,13,15]);
-    this.addPolygon([13,14,15]);
-    this.addPolygon([14,12,15]);
+
+    this.addPolygon([11,12,15], "#1E6CD9", "rgba(30,108,217,0.2)", true, true).addToShieldgroup("default"); // thruster
+    this.addPolygon([11,13,15], "#1E6CD9", "rgba(30,108,217,0.2)", true, true).addToShieldgroup("default");
+    this.addPolygon([13,14,15], "#1E6CD9", "rgba(30,108,217,0.2)", true, true).addToShieldgroup("default");
+    this.addPolygon([14,12,15], "#1E6CD9", "rgba(30,108,217,0.2)", true, true).addToShieldgroup("default");
 
     // this.addEdge(6,16,"rgba(0,0,0,0)");
 

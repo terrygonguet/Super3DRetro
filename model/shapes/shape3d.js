@@ -100,13 +100,19 @@ class Shape3D extends Object3D {
     return this.vertices.length - 1;
   }
 
-  addPolygon(points, borderColor=this.border, innerColor=this.inner) {
+  addPolygon(points, borderColor=this.border, innerColor=this.inner, noCollide=false, noColor=false) {
     let correct = points.length >= 3 && !points.some(pt => !this.vertices[pt]);
     if (correct) {
-      let poly = new Polygon(this, points, borderColor, innerColor);
+      let poly = new Polygon(this, points, borderColor, innerColor, noCollide, noColor);
       this.polygons.push(poly);
       return poly;
     }
+  }
+
+  removePolygon (poly) {
+    let i = this.polygons.indexOf(poly);
+    i !== -1 && this.polygons.splice(i,1);
+    if (!this.polygons.length) this.die();
   }
 
   addEdge (vFrom, vTo, color) {
@@ -119,19 +125,25 @@ class Shape3D extends Object3D {
     }
   }
 
-  addShieldgroup (name) {
-    if (!this.shields[name]) this.shields[name] = new ShieldGroup(name);
+  addShieldgroup (name, hp) {
+    if (!this.shields[name]) this.shields[name] = new ShieldGroup(this, name, hp);
+  }
+
+  die () {
+    game.removeChild(this);
   }
 
 }
 
 class Polygon {
 
-  constructor(shape, points, borderColor, innerColor) {
+  constructor(shape, points, borderColor, innerColor, noCollide=false, noColor=false) {
     this.points = points;
     this.border = borderColor;
     this.inner = innerColor;
     this.shape = shape;
+    this.noCollide = noCollide;
+    this.noColor = noColor;
     this.shieldGroup = null;
   }
 
@@ -140,6 +152,7 @@ class Polygon {
   }
 
   intersects (line) {
+    if (this.noCollide) return false;
     const points = this.getGlobals();
     const plane = $P(points[0], points[1], points[2]);
     const hit = plane.intersectionWith(line);
@@ -160,6 +173,7 @@ class Polygon {
   addToShieldgroup (group) {
     this.shieldGroup = this.shape.shields[group];
     this.shieldGroup.addPolygon(this);
+    return this;
   }
 
 }
