@@ -125,8 +125,8 @@ class Shape3D extends Object3D {
     }
   }
 
-  addShieldgroup (name, hp) {
-    if (!this.shields[name]) this.shields[name] = new ShieldGroup(this, name, hp);
+  addShieldgroup (name, hp, noShield=false) {
+    if (!this.shields[name]) this.shields[name] = new ShieldGroup(this, name, hp, noShield);
   }
 
   die () {

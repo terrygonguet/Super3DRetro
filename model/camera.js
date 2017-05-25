@@ -13,7 +13,6 @@ class Camera extends createjs.Shape {
       [this.j.e(1), this.j.e(2), this.j.e(3)],
       [this.k.e(1), this.k.e(2), this.k.e(3)]
     ]);
-    this.coordsCache   = null;
   }
 
   update (e) {
@@ -42,6 +41,10 @@ class Camera extends createjs.Shape {
     }
   }
 
+  resize () {
+    this.fovH = this.fovW * (game.canvas.height / game.canvas.width);
+  }
+
   render (camera) {
     this.graphics.c();
     this.coordsCache = {};
@@ -53,14 +56,14 @@ class Camera extends createjs.Shape {
 
   getDispCoords (point3d, force=false) {
     let retval = false;//this.coordsCache[point3d.inspect()];
-    if (force || point3d.subtract(this.position).angleFrom(this.i) < this.fovW / 2) {
+    if (force || point3d.subtract(this.position).angleFrom(this.i) < this.fovW) {
       let camCoords = this.transferMatrix.x(point3d.subtract(this.position));
       let angleX = $V([camCoords.e(1), camCoords.e(2), 0]).angleFrom(Vector.i);
       let angleY = $V([camCoords.e(1), 0, camCoords.e(3)]).angleFrom(Vector.i);
 
       retval = {
-        x: (angleX*Math.PI/this.fovW*Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
-        y: (angleY*Math.PI/this.fovH*Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
+        x: (angleX/(this.fovW/2)*Math.sign(camCoords.e(2)) + 1) * game.canvas.width / 2,
+        y: (angleY/(this.fovH/2)*Math.sign(camCoords.e(3)) + 1) * game.canvas.height / 2
       };
       // this.coordsCache[point3d.inspect()] = retval;
     }

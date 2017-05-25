@@ -1,14 +1,14 @@
 class ShieldGroup {
 
-  constructor(shape, name, hp) {
+  constructor(shape, name, hp, noShield=false) {
     this.name = name;
     this.shape = shape;
     this.polygons = [];
-    this.maxAmount = 100;
+    this.maxAmount = (noShield ? 0 : 100);
     this.amount = this.maxAmount;
-    this.enthropy = 0;
-    this.regenRate = 15;
-    this.dissipationRate = 0.05;
+    this.enthropy = (noShield ? 1 : 0);
+    this.regenRate = (noShield ? 0 : 15);
+    this.dissipationRate = (noShield ? 0 : 0.05);
     this.absorbRate = 0.01;
     this.working = true;
     this.hp = hp;
@@ -52,6 +52,7 @@ class ShieldGroup {
       this.enthropy = (this.enthropy - this.dissipationRate * e.delta / 1000).clamp(0, 1);
       this.working = this.enthropy === 0;
     }
+
     if (this.amount === this.maxAmount || this.amount === 0) {
       this.polygons.forEach(poly => !poly.noColor && (poly.inner = null));
     } else {

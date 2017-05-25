@@ -5,6 +5,7 @@ class Turret extends Shape3D {
 
     this.time = 0;
     this.fireRate = 1;
+    this.addShieldgroup("default", 2, true);
 
     this.addVertex($V([-10,0,0])); // back 0
     this.addVertex($V([0,-10,0])); // left 1
@@ -13,14 +14,14 @@ class Turret extends Shape3D {
     this.addVertex($V([0,0,10])); // bottom 4
     this.addVertex($V([25,0,0])); // cannon 5
 
-    this.addPolygon([0,1,3]);
-    this.addPolygon([0,2,3]);
-    this.addPolygon([0,1,4]);
-    this.addPolygon([0,2,4]);
-    this.addPolygon([5,1,3]);
-    this.addPolygon([5,2,3]);
-    this.addPolygon([5,1,4]);
-    this.addPolygon([5,2,4]);
+    this.addPolygon([0,1,3]).addToShieldgroup("default");
+    this.addPolygon([0,2,3]).addToShieldgroup("default");
+    this.addPolygon([0,1,4]).addToShieldgroup("default");
+    this.addPolygon([0,2,4]).addToShieldgroup("default");
+    this.addPolygon([5,1,3]).addToShieldgroup("default");
+    this.addPolygon([5,2,3]).addToShieldgroup("default");
+    this.addPolygon([5,1,4]).addToShieldgroup("default");
+    this.addPolygon([5,2,4]).addToShieldgroup("default");
   }
 
   update (e) {

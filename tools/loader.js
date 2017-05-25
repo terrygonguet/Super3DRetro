@@ -94,5 +94,6 @@ const debug = false;
     if (!game) return;
     game.canvas.width = window.innerWidth;
     game.canvas.height = window.innerHeight;
+    game.camera.resize();
   }
 })();
