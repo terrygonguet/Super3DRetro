@@ -58,9 +58,9 @@ class Camera extends createjs.Shape {
     if (force || point3d.subtract(this.position).angleFrom(this.i) < this.fovW) {
       let camCoords = this.transferMatrix.x(point3d.subtract(this.position));
       let diag = Math.sqrt(Math.pow(camCoords.e(1), 2) + Math.pow(camCoords.e(3), 2));
-      let angleX = Math.atan(camCoords.e(2) / diag);
+      let angleX = Math.asin(camCoords.e(2) / diag) + (camCoords.e(1) < 0 ? Math.PI / 2 : 0) * Math.sign(camCoords.e(2));
       diag = Math.sqrt(Math.pow(camCoords.e(1), 2) + Math.pow(camCoords.e(2), 2));
-      let angleY = Math.atan(camCoords.e(3) / diag);
+      let angleY = Math.asin(camCoords.e(3) / diag) + (camCoords.e(1) < 0 ? Math.PI / 2 : 0) * Math.sign(camCoords.e(3));
 
       retval = {
         x: (angleX/(this.fovW/2) + 1) * game.canvas.width / 2,
